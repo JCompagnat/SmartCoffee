@@ -75,7 +75,7 @@ class max31865(object):
 		#
 
 		#one shot
-		self.writeRegister(0, 0xB2)
+		self.writeRegister(0, 0xA2)
 
 		# conversion time is less than 100ms
 		time.sleep(.1) #give it 100ms for conversion
