@@ -93,7 +93,7 @@ class max31865(object):
 
 		[hft_msb, hft_lsb] = [out[3], out[4]]
 		hft = (( hft_msb << 8 ) | hft_lsb ) >> 1
-		print ()"high fault threshold: %d" % hft)
+		print ("high fault threshold: %d" % hft)
 
 		[lft_msb, lft_lsb] = [out[5], out[6]]
 		lft = (( lft_msb << 8 ) | lft_lsb ) >> 1
