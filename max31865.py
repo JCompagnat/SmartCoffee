@@ -110,7 +110,7 @@ class max31865(object):
 		# bit 3: RTDIN- < 0.85 x VBias (FORCE- open) -> must be requested
 		# bit 2: Overvoltage / undervoltage fault
 		# bits 1,0 don't care
-		#print "Status byte: %x" % status
+		print ()"Status byte: %x" % status)
 
 		if ((status & 0x80) == 1):
 			raise FaultError("High threshold limit (Cable fault/open)")
