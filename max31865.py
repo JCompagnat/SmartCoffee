@@ -207,7 +207,7 @@ class FaultError(Exception):
 if __name__ == "__main__":
 
 	import max31865
-	csPin = 5
+	csPin = 8
 	misoPin = 9
 	mosiPin = 10
 	clkPin = 11
