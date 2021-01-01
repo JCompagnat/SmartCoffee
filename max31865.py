@@ -72,10 +72,10 @@ class max31865(object):
 		#
 		# 0b11010010 or 0xD2 for continuous auto conversion
 		# at 60Hz (faster conversion)
-		#
+		#10100010
 
 		#one shot
-		self.writeRegister(0, 0xA2)
+		self.writeRegister(0, 0xB2)
 
 		# conversion time is less than 100ms
 		time.sleep(.1) #give it 100ms for conversion
