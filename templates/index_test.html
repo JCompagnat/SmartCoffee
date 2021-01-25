@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<link rel="icon" href="{{ url_for("static", filename="Icon FeelYou app.svgs") }}">
+		<meta name = "viewport" content = "user-scalable=no, width=device-width">
+		<!-- Bootstrap CSS & custom CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" type= "text/css" href="{{ url_for("static", filename="style.css") }}">
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type=text/javascript>
+
+			setInterval("my_function();",1000);
+
+			function my_function(){
+				$.getJSON('/_get_temp', {},
+					function(data) {
+					$("#currentTemp").text(data.temp);
+				  });
+				$.getJSON('/_set_temp', {target: $('input[name="inputTargetTemp"]').val(),
+				  },function(data) {
+					$("#targetTemp").text(data.temp);
+				  });
+					return false;
+		 };
+
+		</script>
+
+		<title>Smart Coffee </title>
+		</head>
+
+		<body>
+			<form>
+				<label for="inputTargetTemp">new target temperature:</label>
+				<input type="int" id="inputTargetTemp" name="inputTargetTemp" required
+				       minlength="4" maxlength="8" size="10">
+			</form>
+			<label for="targetTemp">Target temperature:</label>
+			<p id=targetTemp>This is some text in a paragraph.</p>
+			<label for="currentTemp">Target temperature:</label>
+			<p id=currentTemp>This is some text in a paragraph.</p>
+
+
+
+		</body>
+
+
+
+</html>
