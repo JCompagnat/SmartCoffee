@@ -11,7 +11,7 @@ def index():
 	return render_template('index.html')
 
 @app.route('/ManualOperations')
-def index():
+def ManualOperations():
 	return render_template('ManualOperations.html')
 
 
