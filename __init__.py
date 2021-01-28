@@ -12,7 +12,7 @@ def index():
 
 @app.route('/ManualOperations')
 def ManualOperations():
-	return render_template('ManualOperations.html')
+	return render_template('manualoperations.html')
 
 
 @app.route('/_get_temp')
