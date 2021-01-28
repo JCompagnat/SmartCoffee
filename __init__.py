@@ -10,7 +10,7 @@ app = Flask(__name__)
 def index():
 	return render_template('index.html')
 
-@app.route('/ManualOperations')
+@app.route('/manualoperations')
 def ManualOperations():
 	return render_template('manualoperations.html')
 
