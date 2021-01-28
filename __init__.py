@@ -10,6 +10,10 @@ app = Flask(__name__)
 def index():
 	return render_template('index.html')
 
+@app.route('/ManualOperations')
+def index():
+	return render_template('ManualOperations.html')
+
 
 @app.route('/_get_temp')
 def _get_temp():
