@@ -76,7 +76,7 @@ class max31865(object):
                 #10100010
 
                 #one shot
-				self.writeRegister(0, 0xA2)
+                self.writeRegister(0, 0xA2)
 
                 # conversion time is less than 100ms
                 time.sleep(.1) #give it 100ms for conversion
@@ -197,7 +197,7 @@ class max31865(object):
                 #print ("Straight Line Approx. Temp: %f degC" % temp_C_line)
                 #print ("Callendar-Van Dusen Temp (degC > 0): %f degC" % temp_C)
                 #print "Solving Full Callendar-Van Dusen using numpy: %f" %  temp_C_numpy
-              if (temp_C < 0): #use straight line approximation if less than 0
+                if (temp_C < 0): #use straight line approximation if less than 0
                         # Can also use python lib numpy to solve cubic
                         # Should never get here in this application
                         temp_C = (RTD_ADC_Code/32) - 256
