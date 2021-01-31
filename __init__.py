@@ -1,7 +1,10 @@
 
 # initialize application
 from flask import Flask, jsonify, render_template, request, url_for
-#import max31865
+
+import time, math
+import RPi.GPIO as GPIO
+import max31865
 import random, json
 app = Flask(__name__)
 
