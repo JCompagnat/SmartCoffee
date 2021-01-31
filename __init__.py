@@ -21,9 +21,10 @@ def ManualOperations():
 @app.route('/_get_temp')
 def _get_temp():
 
-    tempC=random.randint(30, 110)
-    #max = max31865.max31865(csPin,misoPin,mosiPin,clkPin)
-    #tempC = max.readTemp()
+    #tempC=random.randint(30, 110)
+	max = max31865.max31865()
+    tempC = max.readTemp()
+	#tempC = max.readTemp()
     return jsonify(temp=tempC)
 
 
