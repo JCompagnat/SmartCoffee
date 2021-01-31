@@ -17,11 +17,11 @@
 	setInterval("my_function();",1000);
 
 	function my_function(){
-		$.getJSON('/_get_temp', {},
+		$.getJSON('/SmartCoffee/_get_temp', {},
 		function(data) {
 			$("#currentTemp").text(data.temp);
 		});
-		$.getJSON('/_set_temp', {target: $('input[name="inputTargetTemp"]').val(),
+		$.getJSON('/SmartCoffee/_set_temp', {target: $('input[name="inputTargetTemp"]').val(),
 	},function(data) {
 		$("#targetTemp").text(data.temp);
 	});
