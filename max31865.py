@@ -53,7 +53,7 @@ class max31865(object):
                 GPIO.output(self.clkPin, GPIO.LOW)
                 GPIO.output(self.mosiPin, GPIO.LOW)
 
-		def readTemp(self):
+	def readTemp(self):
                 #
                 # b10000000 = 0x80
                 # 0x8x to specify 'write register value'
@@ -84,7 +84,7 @@ class max31865(object):
                 # read all registers
                 out = self.readRegisters(0,8)
 
-				conf_reg = out[0]
+		conf_reg = out[0]
                 #print ("config register byte: %x" % conf_reg)
 
                 [rtd_msb, rtd_lsb] = [out[1], out[2]]
@@ -121,7 +121,7 @@ class max31865(object):
                         raise FaultError("Overvoltage or Undervoltage Error")
                 return temp_C
 
-        def writeRegister(self, regNum, dataByte):
+	def writeRegister(self, regNum, dataByte):
                 GPIO.output(self.csPin, GPIO.LOW)
 
                 # 0x8x to specify 'write register value'
@@ -134,7 +134,7 @@ class max31865(object):
 
                 GPIO.output(self.csPin, GPIO.HIGH)
 
-				    def readRegisters(self, regNumStart, numRegisters):
+	def readRegisters(self, regNumStart, numRegisters):
                 out = []
                 GPIO.output(self.csPin, GPIO.LOW)
 
