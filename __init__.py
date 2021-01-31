@@ -17,7 +17,7 @@ def index():
 def ManualOperations():
 	return render_template('manualoperations.html')
 
-@app.route('/plex)
+@app.route('/plex')
 def plex():
 	return render_template('plex.html')
 
