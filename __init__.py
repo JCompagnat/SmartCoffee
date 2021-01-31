@@ -23,7 +23,7 @@ def _get_temp():
 
 	#tempC=random.randint(30, 110)
 	max = max31865.max31865()
-	tempC = max.readTemp()
+	tempC = int(max.readTemp())
 	#tempC = max.readTemp()
 	return jsonify(temp=tempC)
 
