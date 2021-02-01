@@ -13,21 +13,25 @@ app = Flask(__name__)
 def index():
 	return render_template('index.html')
 
+
 @app.route('/manualoperations')
 def ManualOperations():
 	return render_template('manualoperations.html')
 
+
 @app.route('/plex')
 def plex():
 	return render_template('plex.html')
+
 
 @app.route('/_get_temp')
 def _get_temp():
 
 	#tempC=random.randint(30, 110)
 	max = max31865.max31865()
-	tempC = int(max.readTemp())
+	tempC = max.readTemp()
 	#tempC = max.readTemp()
+    GPIO.cleanup()
 	return jsonify(temp=tempC)
 
 
