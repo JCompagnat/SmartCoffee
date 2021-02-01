@@ -31,7 +31,7 @@ def _get_temp():
 	max = max31865.max31865()
 	tempC = max.readTemp()
 	#tempC = max.readTemp()
-    GPIO.cleanup()
+	GPIO.cleanup()
 	return jsonify(temp=tempC)
 
 
