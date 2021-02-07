@@ -38,6 +38,7 @@ def _get_temp():
 @app.route('/_set_temp')
 def _set_temp():
 
+	GPIO.setmode(GPIO.BCM)
 	target = request.args.get('target', 0, type=int)
 	current = _get_temp()
 	P = 4
@@ -52,7 +53,6 @@ def _set_temp():
 	if command > 100:
 		command = 100
 
-	GPIO.setmode (GPIO.BCM)
 	GPIO.setup(23,GPIO.OUT)
 	p = GPIO.PWM(23, 60)
 	p.start(command)
