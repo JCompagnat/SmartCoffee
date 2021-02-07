@@ -41,7 +41,11 @@ def _set_temp():
 	GPIO.setmode(GPIO.BCM)
 	#target = request.args.get('target', 0, type=int)
 	target = int(97)
-	current =int(_get_temp())
+
+	max = max31865.max31865()
+	current = int(max.readTemp())
+	GPIO.cleanup()
+
 	P = 4
 
 	diff = target-current
