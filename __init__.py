@@ -41,10 +41,6 @@ def _set_temp():
 	target = request.args.get('target', 0, type=int)
 	current = _get_temp()
 	P = 4
-	channel = 23
-	frequency = 60
-	heat = GPIO.PWM(channel, frequency)
-	heat.start(0)
 
 	diff = target-current
 
@@ -56,8 +52,10 @@ def _set_temp():
 	if command > 100:
 		command = 100
 
-	heat.ChangeDutyCycle(command)
-	
+	GPIO.setmode (GPIO.BCM)
+	GPIO.setup(23,GPIO.OUT)
+	p = GPIO.PWM(23, 60)
+	p.start(command)
 
 	return
 
