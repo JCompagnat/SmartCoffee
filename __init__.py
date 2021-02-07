@@ -39,7 +39,8 @@ def _get_temp():
 def _set_temp():
 
 	GPIO.setmode(GPIO.BCM)
-	target = request.args.get('target', 0, type=int)
+	#target = request.args.get('target', 0, type=int)
+	target = 97
 	current = _get_temp()
 	P = 4
 
