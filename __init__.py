@@ -39,17 +39,27 @@ def _get_temp():
 def _set_temp():
 
 	target = request.args.get('target', 0, type=int)
+	current = _get_temp()
+	P = 4
+	channel = 23
+	frequency = 60
+	heat = GPIO.PWM(channel, frequency)
+	heat.start(0)
 
-	with open("config.json", "r") as jsonFile:
-		config = json.load(jsonFile)
+	diff = target-current
 
-	config["heater"] = target
-	print(config)
+	if diff < 0:
+		diff = 0
 
-	with open("config.json", "w") as jsonFile:
-		json.dump(config, jsonFile)
+	command = P * diff
 
-	return jsonify(temp=target)
+	if command > 100:
+		command = 100
+
+	heat.ChangeDutyCycle(command)
+	
+
+	return
 
 
 @app.route('/_set_time')

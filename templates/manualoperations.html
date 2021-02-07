@@ -21,7 +21,7 @@
 		function(data) {
 			$("#currentTemp").text(data.temp);
 		});
-		$.getJSON('/SmartCoffee/_set_temp', {target: $('input[name="inputTargetTemp"]').val(),
+		$.getJSON('/SmartCoffee/_set_temp', {target: $('input[name="targetTemp"]').val(),
 	},function(data) {
 		$("#targetTemp").text(data.temp);
 	});
@@ -41,8 +41,10 @@
 		<form name="data"  method='POST'>
 
 			<label for="customRange1" class="form-label">Example range</label>
-			<input type="range" class="form-range" min="90" max="130" step="0.5" id="customRange3" oninput="amount.value=customRange3.value">
-			<output id="amount" name="amount" for="customRange3">0</output>
+			<output id="amount" name="amount" for="targetTemp">0</output>
+			<input type="range" class="form-range" min="90" max="130" step="0.5"
+			value="98" id="targetTemp" oninput="amount.value=targetTemp.value">
+			<output id="amount" name="amount" for="targetTemp">98</output>
 
 			<label for="currentTemp">Current temperature:</label>
 			<p id=currentTemp>This is some text in a paragraph.</p>
