@@ -58,12 +58,14 @@ def _set_temp():
 	if command > 100:
 		command = 100
 
+	print(command)
+
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(23,GPIO.OUT)
 	p = GPIO.PWM(23, 60)
 	p.start(command)
 
-	return
+	return jsonify(command=command)
 
 
 @app.route('/_set_time')
