@@ -216,4 +216,3 @@ if __name__ == "__main__":
         max = max31865.max31865(csPin,misoPin,mosiPin,clkPin)
         tempC = max.readTemp()
         print(tempC)
-        GPIO.cleanup()
