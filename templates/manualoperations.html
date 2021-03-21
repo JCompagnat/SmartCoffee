@@ -20,11 +20,10 @@
 		$.getJSON('/SmartCoffee/_get_temp', {},
 		function(data) {
 			$("#currentTemp").text(data.temp);
+			$("#commandP").text(data.commandP);
+			$("#commandI").text(data.commandI);
+			$("#commandD").text(data.commandD);
 		});
-		$.getJSON('/SmartCoffee/_set_temp', {target: $('input[name="targetTemp"]').val(),
-	},function(data) {
-		$("#targetTemp").text(data.temp);
-	});
 	return false;
 };
 
@@ -48,6 +47,15 @@
 
 			<label for="currentTemp">Current temperature:</label>
 			<p id=currentTemp>This is some text in a paragraph.</p>
+
+			<label for="commandP">Command P:</label>
+			<p id=commandP>This is some text in a paragraph.</p>
+
+			<label for="commandI">Command I:</label>
+			<p id=commandI>This is some text in a paragraph.</p>
+
+			<label for="commandD">Command D:</label>
+			<p id=commandD>This is some text in a paragraph.</p>
 
 		</form>
 	</div>
