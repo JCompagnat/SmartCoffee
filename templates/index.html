@@ -12,22 +12,6 @@
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type=text/javascript>
-
-
-			setInterval("my_function();",1000);
-
-			function my_function(){
-				$.getJSON('/_get_temp', {},
-					function(data) {
-					$("#currentTemp").text(data.temp);
-				  });
-				$.getJSON('/_set_temp', {target: $('input[name="inputTargetTemp"]').val(),
-				  },function(data) {
-					$("#targetTemp").text(data.temp);
-				  });
-					return false;
-		 };
-
 		</script>
 
 		<title>Smart Coffee </title>
