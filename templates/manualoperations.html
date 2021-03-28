@@ -20,9 +20,9 @@
 		$.getJSON('/SmartCoffee/_get_temp', {},
 		function(data) {
 			$("#currentTemp").text(data.temp);
-			<!-- $("#commandP").text(data.commandP)  -->
-			<!-- $("#commandI").text(data.commandI)  -->
-			<!-- $("#commandD").text(data.commandD)  -->
+			$("#commandP").text(data.commandP);
+			$("#commandI").text(data.commandI);
+			$("#commandD").text(data.commandD);
 		});
 	return false;
 };

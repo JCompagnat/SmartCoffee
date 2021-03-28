@@ -12,14 +12,14 @@ app = Flask(__name__)
 
 @app.route('/')  # the default is GET only
 def index():
-	#max = max31865.max31865()
-	#GPIO.setmode(GPIO.BCM)
-	#GPIO.setup(23, GPIO.OUT)
-	#pwm = GPIO.PWM(23,60)
-	#pwm.start(10)
-	#pwm.ChangeDutyCycle(30)
-	#pid = PID(20, 0, 200, setpoint=98)
-	#pid.output_limits = (0, 100)
+	max = max31865.max31865()
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setup(23, GPIO.OUT)
+	pwm = GPIO.PWM(23,60)
+	pwm.start(10)
+	pwm.ChangeDutyCycle(30)
+	pid = PID(20, 0, 200, setpoint=98)
+	pid.output_limits = (0, 100)
 	return render_template('index.html')
 
 
