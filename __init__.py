@@ -8,6 +8,7 @@ import max31865
 import random, json
 from simple_pid import PID
 app = Flask(__name__)
+app.secret_key = 'BAD_SECRET_KEY'
 
 
 @app.route('/')  # the default is GET only
