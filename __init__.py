@@ -7,6 +7,8 @@ import RPi.GPIO as GPIO
 import max31865
 import random, json
 from simple_pid import PID
+from json import JSONEncoder
+
 app = Flask(__name__)
 app.secret_key = 'BAD_SECRET_KEY'
 
@@ -21,6 +23,9 @@ def index():
 	session['pwm'].ChangeDutyCycle(30)
 	session['pid'] = PID(20, 0, 200, setpoint=98)
 	session['pid'].output_limits = (0, 100)
+
+	session['pwm'] = jsonpickle.encode(session['pwm'])
+	session['pid'] = jsonpickle.encode(session['pid'])
 	return render_template('index.html')
 
 
@@ -36,12 +41,16 @@ def plex():
 
 @app.route('/_get_temp')
 def _get_temp():
+	session['pwm'] = jsonpickle.decode(session['pwm'])
+	session['pid'] = jsonpickle.decode(session['pid'])
 	tempC=random.randint(30, 110)
 	tempC = tempC.readTemp()
 	control = session['pid'](tempC)
 	session['pwm'].ChangeDutyCycle(control)
 	p, i, d = session['pid'].components
 	#tempC = max.readTemp()
+	session['pwm'] = jsonpickle.encode(session['pwm'])
+	session['pid'] = jsonpickle.encode(session['pid'])
 	return jsonify(temp=tempC, commandP=P, commandI=I, commandD=D)
 
 @app.route('/_set_temp')
