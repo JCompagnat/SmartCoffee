@@ -56,7 +56,7 @@ def _get_temp():
 	session['pid'] = jsonpickle.encode(session['pid'])
 	session['tempSensor'] = jsonpickle.encode(session['tempSensor'])
 
-	return jsonify(temp=tempC, commandP=P, commandI=I, commandD=D)
+	return jsonify(temp=tempC, commandP=p, commandI=i, commandD=d)
 
 @app.route('/_set_temp')
 def _set_temp():
