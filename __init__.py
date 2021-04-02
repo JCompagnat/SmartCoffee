@@ -1,6 +1,6 @@
 
 # initialize application
-from flask import Flask, jsonify, render_template, request, url_for
+from flask import Flask, jsonify, render_template, request, url_for, session
 
 import time, math
 import RPi.GPIO as GPIO
@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')  # the default is GET only
 def index():
-	max = max31865.max31865()
+	session['tempSensor']= max31865.max31865()
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(23, GPIO.OUT)
 	pwm = GPIO.PWM(23,60)
@@ -36,7 +36,7 @@ def plex():
 @app.route('/_get_temp')
 def _get_temp():
 	#tempC=random.randint(30, 110)
-	tempC = max.readTemp()
+	tempC = session['tempSensor'].readTemp()
 	control = pid(tempC)
 	pwm.ChangeDutyCycle(control)
 	p, i, d = pid.components
