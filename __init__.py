@@ -13,14 +13,14 @@ app.secret_key = 'BAD_SECRET_KEY'
 
 @app.route('/')  # the default is GET only
 def index():
-	session['tempSensor']= max31865.max31865()
+	#session['tempSensor']= max31865.max31865()
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(23, GPIO.OUT)
-	pwm = GPIO.PWM(23,60)
-	pwm.start(10)
-	pwm.ChangeDutyCycle(30)
-	pid = PID(20, 0, 200, setpoint=98)
-	pid.output_limits = (0, 100)
+	session['pwm']= GPIO.PWM(23,60)
+	session['pwm'].start(10)
+	session['pwm'].ChangeDutyCycle(30)
+	session['pid'] = PID(20, 0, 200, setpoint=98)
+	session['pid'].output_limits = (0, 100)
 	return render_template('index.html')
 
 
@@ -36,11 +36,11 @@ def plex():
 
 @app.route('/_get_temp')
 def _get_temp():
-	#tempC=random.randint(30, 110)
-	tempC = session['tempSensor'].readTemp()
-	control = pid(tempC)
-	pwm.ChangeDutyCycle(control)
-	p, i, d = pid.components
+	tempC=random.randint(30, 110)
+	tempC = tempC.readTemp()
+	control = session['pid'](tempC)
+	session['pwm'].ChangeDutyCycle(control)
+	p, i, d = session['pid'].components
 	#tempC = max.readTemp()
 	return jsonify(temp=tempC, commandP=P, commandI=I, commandD=D)
 
