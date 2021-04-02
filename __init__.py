@@ -50,6 +50,7 @@ def _get_temp():
 	tempC = session['tempSensor'].readTemp()
 	control = session['pid'](tempC)
 	session['pwm'].ChangeDutyCycle(control)
+	print(control)
 	p, i, d = session['pid'].components
 	#tempC = max.readTemp()
 	session['pwm'] = jsonpickle.encode(session['pwm'])
