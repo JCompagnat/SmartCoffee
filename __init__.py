@@ -19,14 +19,14 @@ def index():
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(23, GPIO.OUT)
 	session['tempSensor'] = max31865.max31865()
-	session['pwm']= GPIO.PWM(23,60)
-	session['pwm'].start(10)
-	session['pwm'].ChangeDutyCycle(30)
-	session['pid'] = PID(20, 0, 200, setpoint=98)
+	#session['pwm']= GPIO.PWM(23,60)
+	#session['pwm'].start(10)
+	#session['pwm'].ChangeDutyCycle(30)
+	session['pid'] = PID(20, 0, 200, setpoint=97.5)
 	session['pid'].output_limits = (0, 100)
 
 	session['tempSensor'] = jsonpickle.encode(session['tempSensor'])
-	session['pwm'] = jsonpickle.encode(session['pwm'])
+	#session['pwm'] = jsonpickle.encode(session['pwm'])
 	session['pid'] = jsonpickle.encode(session['pid'])
 	return render_template('index.html')
 
@@ -43,17 +43,19 @@ def plex():
 
 @app.route('/_get_temp')
 def _get_temp():
-	session['pwm'] = jsonpickle.decode(session['pwm'])
+	#session['pwm'] = jsonpickle.decode(session['pwm'])
 	session['pid'] = jsonpickle.decode(session['pid'])
 	session['tempSensor'] = jsonpickle.decode(session['tempSensor'])
 	#tempC=random.randint(30, 110)
 	tempC = session['tempSensor'].readTemp()
 	control = session['pid'](tempC)
+	pwm=GPIO.PWM(23,60)
+	pwm.start(control)
 	session['pwm'].ChangeDutyCycle(control)
 	print(control)
 	p, i, d = session['pid'].components
 	#tempC = max.readTemp()
-	session['pwm'] = jsonpickle.encode(session['pwm'])
+	#session['pwm'] = jsonpickle.encode(session['pwm'])
 	session['pid'] = jsonpickle.encode(session['pid'])
 	session['tempSensor'] = jsonpickle.encode(session['tempSensor'])
 
