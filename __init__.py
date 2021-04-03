@@ -43,6 +43,7 @@ def plex():
 
 @app.route('/_get_temp')
 def _get_temp():
+	GPIO.setmode(GPIO.BCM)
 	#session['pwm'] = jsonpickle.decode(session['pwm'])
 	session['pid'] = jsonpickle.decode(session['pid'])
 	session['tempSensor'] = jsonpickle.decode(session['tempSensor'])
