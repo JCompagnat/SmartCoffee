@@ -12,10 +12,13 @@ import multiprocessing
 
 app = Flask(__name__)
 app.secret_key = 'BAD_SECRET_KEY'
+manager = multiprocessing.Manager()
 
 
 @app.route('/')  # the default is GET only
 def index():
+
+	shardedData = manager.dict()
 
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_1.start()
@@ -58,47 +61,16 @@ def _get_temp():
 	#pwm.start(control)
 	#session['pwm'].ChangeDutyCycle(control)
 	#print(control)
-	p = session['pid_p']
-	i = session['pid_i']
-	d = session['pid_d']
-	waterTemp = session['waterTemp']
+	p = shardedData['pid_p']
+	i = shardedData['pid_i']
+	d = shardedData['pid_d']
+	waterTemp = shardedData['waterTemp']
 	#tempC = max.readTemp()
 	#session['pwm'] = jsonpickle.encode(session['pwm'])
 	#session['pid'] = jsonpickle.encode(session['pid'])
 	#session['tempSensor'] = jsonpickle.encode(session['tempSensor'])
 
 	return jsonify(temp=waterTemp, commandP=p, commandI=i, commandD=d)
-
-@app.route('/_set_temp')
-def _set_temp():
-
-	GPIO.setmode(GPIO.BCM)
-	#target = request.args.get('target', 0, type=int)
-	target = int(97)
-
-	max = max31865.max31865()
-	current = int(max.readTemp())
-
-	P = 4
-
-	diff = target-current
-
-	if diff < 0:
-		diff = 0
-
-	command = P * diff
-
-	if command > 100:
-		command = 100
-
-	print(command)
-
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(23,GPIO.OUT)
-	p = GPIO.PWM(23, 60)
-	p.start(command)
-
-	return jsonify(command=command)
 
 
 @app.route('/_set_time')
@@ -127,11 +99,11 @@ def pid():
 		pwm.ChangeDutyCycle(control)
 
 		p, i, d = pid.components
-		session['pid_p']=p
-		session['pid_i']=i
-		session['pid_d']=d
-		session['pid_control']=control
-		session['waterTemp']=waterTemp
+		shardedData['pid_p']=p
+		shardedData['pid_i']=i
+		shardedData['pid_d']=d
+		shardedData['pid_control']=control
+		shardedData['waterTemp']=waterTemp
 
 
 		time.sleep(1)
