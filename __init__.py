@@ -121,7 +121,7 @@ def pid():
 
 	while True:
 		tempSensor = max31865.max31865()
-		waterTemp = tempSensor.readTemp
+		waterTemp = tempSensor.readTemp()
 
 		control = pid(waterTemp)
 		pwm.ChangeDutyCycle(control)
