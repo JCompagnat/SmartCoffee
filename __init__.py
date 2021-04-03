@@ -52,7 +52,7 @@ def _get_temp():
 	control = session['pid'](tempC)
 	pwm=GPIO.PWM(23,60)
 	pwm.start(control)
-	session['pwm'].ChangeDutyCycle(control)
+	#session['pwm'].ChangeDutyCycle(control)
 	print(control)
 	p, i, d = session['pid'].components
 	#tempC = max.readTemp()
