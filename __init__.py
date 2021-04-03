@@ -13,12 +13,13 @@ import multiprocessing
 app = Flask(__name__)
 app.secret_key = 'BAD_SECRET_KEY'
 manager = multiprocessing.Manager()
+shardedData = manager.dict()
+
 
 
 @app.route('/')  # the default is GET only
 def index():
 
-	shardedData = manager.dict()
 
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_1.start()
