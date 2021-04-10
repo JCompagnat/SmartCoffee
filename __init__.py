@@ -95,8 +95,7 @@ def pid():
 	tempSensor = max31865.max31865()
 
 	while True:
-		
-		tempSensor = max31865.max31865()
+
 		waterTemp = tempSensor.readTemp()
 
 		control = pid(waterTemp)
