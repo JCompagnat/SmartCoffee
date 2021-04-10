@@ -13,7 +13,15 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type=text/javascript>
 
-	$(function() { $("#brewButton").click(function (event) { $.getJSON('/brew', { },
+	$(function() {
+		$('a#brewButton').bind('click', function() {
+			$.getJSON('/_brew',
+					function(data) {
+				//do nothing
+			});
+			return false;
+		});
+	});
 
 	setInterval("my_function();",1000);
 
@@ -58,8 +66,7 @@
 			<label for="commandD">Command D:</label>
 			<p id=commandD>This is some text in a paragraph.</p>
 
-			<input type = "Brew 20 sec" id = "brewButton" value = "Brew 20 sec" />
-
+			<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
 
 		</form>
 	</div>
