@@ -22,7 +22,10 @@ def index():
 
 
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
+	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
+
 	worker_1.start()
+	worker_2.start()
 	#session['tempSensor']= max31865.max31865()
 	#session['tempSensor'] = max31865.max31865()
 	#session['pwm']= GPIO.PWM(23,60)
@@ -74,13 +77,11 @@ def _get_temp():
 	return jsonify(temp=waterTemp, commandP=p, commandI=i, commandD=d)
 
 
-@app.route('/_set_time')
-def _set_time():
+@app.route('/_brew')
+def _brew():
 
-    tempC=random.randint(30, 110)
-    #max = max31865.max31865(csPin,misoPin,mosiPin,clkPin)
-    #tempC = max.readTemp()
-    return jsonify(temp=tempC)
+    shardedData['brewTime'] = 1
+    return
 
 
 def pid():
@@ -111,7 +112,21 @@ def pid():
 
 	return
 
+def brew():
 
+	while True:
+
+		if shardedData['brewTime'] = 1:
+
+			GPIO.setmode(GPIO.BCM)
+			GPIO.setup(24,GPIO.OUT)
+			GPIO.output(24, 1)
+			time.sleep(20)
+			GPIO.output(24, 1)
+			shardedData['brewTime'] = 0
+
+
+	return
 
 
 #@app.route('/_start_pump')
