@@ -15,7 +15,7 @@
 
 	$(function() {
 		$('a#brewButton').bind('click', function() {
-			$.getJSON('/_brew',
+			$.getJSON('/SmartCoffee/_brew',
 					function(data) {
 				//do nothing
 			});
@@ -65,10 +65,10 @@
 
 			<label for="commandD">Command D:</label>
 			<p id=commandD>This is some text in a paragraph.</p>
-
-			<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
-
 		</form>
+
+		<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
+
 	</div>
 
 
