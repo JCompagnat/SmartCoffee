@@ -116,7 +116,7 @@ def brew():
 
 	while True:
 
-		if shardedData['brewTime'] = 1:
+		if shardedData['brewTime'] == 1:
 
 			GPIO.setmode(GPIO.BCM)
 			GPIO.setup(24,GPIO.OUT)
