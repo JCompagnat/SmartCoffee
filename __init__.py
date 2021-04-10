@@ -125,6 +125,7 @@ def brew():
 			GPIO.output(24, 0)
 			shardedData['brewTime'] = 0
 
+		time.sleep(1)
 
 	return
 
