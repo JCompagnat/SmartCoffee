@@ -20,8 +20,7 @@ shardedData = manager.dict()
 @app.route('/')  # the default is GET only
 def index():
 
-    shardedData['brewTime'] = 0
-
+	shardedData['brewTime'] = 0
 
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
@@ -60,7 +59,6 @@ def _get_temp():
 	d = shardedData['pid_d']
 	brewTime = shardedData['brewTime']
 	waterTemp = shardedData['waterTemp']
-
 	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d, brew=brewTime)
 
 
@@ -97,7 +95,6 @@ def pid():
 		shardedData['pid_d']=d
 		shardedData['pid_control']=control
 		shardedData['waterTemp']=waterTemp
-
 
 		time.sleep(1)
 

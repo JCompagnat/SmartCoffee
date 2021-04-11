@@ -16,7 +16,7 @@
 	$(function() {
 		$('a#brewButton').bind('click', function() {
 			$.getJSON('/SmartCoffee/_brew',
-					function(data) {
+			function(data) {
 				//do nothing
 			});
 			return false;
@@ -35,8 +35,8 @@
 			$("#brewTime").text(data.brew);
 
 		});
-	return false;
-};
+		return false;
+	};
 
 </script>
 
