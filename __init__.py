@@ -81,7 +81,7 @@ def _get_temp():
 def _brew():
 
     shardedData['brewTime'] = 1
-    return
+    return jsonify(temp=shardedData['brewTime'])
 
 
 def pid():
