@@ -76,8 +76,7 @@ def _get_temp():
 	#session['pid'] = jsonpickle.encode(session['pid'])
 	#session['tempSensor'] = jsonpickle.encode(session['tempSensor'])
 
-	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d,
-	brew=brewTime)
+	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d, brew=brewTime)
 
 
 @app.route('/_brew')
