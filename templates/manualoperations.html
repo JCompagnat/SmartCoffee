@@ -32,6 +32,8 @@
 			$("#commandP").text(data.commandP);
 			$("#commandI").text(data.commandI);
 			$("#commandD").text(data.commandD);
+			$("#brewTime").text(data.brew);
+
 		});
 	return false;
 };
@@ -65,6 +67,9 @@
 
 			<label for="commandD">Command D:</label>
 			<p id=commandD>This is some text in a paragraph.</p>
+
+			<label for="brew?">Command D:</label>
+			<p id=brewTime>This is some text in a paragraph.</p>
 		</form>
 
 		<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>

@@ -68,13 +68,16 @@ def _get_temp():
 	p = shardedData['pid_p']
 	i = shardedData['pid_i']
 	d = shardedData['pid_d']
+	brewTime = shardedData['brewTime']
+
 	waterTemp = shardedData['waterTemp']
 	#tempC = max.readTemp()
 	#session['pwm'] = jsonpickle.encode(session['pwm'])
 	#session['pid'] = jsonpickle.encode(session['pid'])
 	#session['tempSensor'] = jsonpickle.encode(session['tempSensor'])
 
-	return jsonify(temp=waterTemp, commandP=p, commandI=i, commandD=d)
+	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d,
+	brew=brewTime)
 
 
 @app.route('/_brew')
