@@ -20,6 +20,8 @@ shardedData = manager.dict()
 @app.route('/')  # the default is GET only
 def index():
 
+    shardedData['brewTime'] = 0
+
 
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
@@ -52,29 +54,12 @@ def plex():
 
 @app.route('/_get_temp')
 def _get_temp():
-	#GPIO.setmode(GPIO.BCM)
-	#GPIO.setmode(GPIO.BCM)
-	#GPIO.setup(23, GPIO.OUT)
-	#session['pwm'] = jsonpickle.decode(session['pwm'])
-	#session['pid'] = jsonpickle.decode(session['pid'])
-	#session['tempSensor'] = jsonpickle.decode(session['tempSensor'])
-	#tempC=random.randint(30, 110)
-	#tempC = session['tempSensor'].readTemp()
-	#control = session['pid'](tempC)
-	#pwm=GPIO.PWM(23,60)
-	#pwm.start(control)
-	#session['pwm'].ChangeDutyCycle(control)
-	#print(control)
+
 	p = shardedData['pid_p']
 	i = shardedData['pid_i']
 	d = shardedData['pid_d']
 	brewTime = shardedData['brewTime']
-
 	waterTemp = shardedData['waterTemp']
-	#tempC = max.readTemp()
-	#session['pwm'] = jsonpickle.encode(session['pwm'])
-	#session['pid'] = jsonpickle.encode(session['pid'])
-	#session['tempSensor'] = jsonpickle.encode(session['tempSensor'])
 
 	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d, brew=brewTime)
 
