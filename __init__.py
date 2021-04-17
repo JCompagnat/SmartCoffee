@@ -75,6 +75,7 @@ def pid():
 
 		while waterTemp<15 or waterTemp>130:
 			waterTemp = tempSensor.readTemp()
+			waterTemp = round(waterTemp,1)
 
 		control = pid(waterTemp)
 		pwm.ChangeDutyCycle(control)
