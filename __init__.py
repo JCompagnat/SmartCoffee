@@ -27,17 +27,7 @@ def index():
 
 	worker_1.start()
 	worker_2.start()
-	#session['tempSensor']= max31865.max31865()
-	#session['tempSensor'] = max31865.max31865()
-	#session['pwm']= GPIO.PWM(23,60)
-	#session['pwm'].start(10)
-	#session['pwm'].ChangeDutyCycle(30)
-	#session['pid'] = PID(20, 0, 200, setpoint=97.5)
-	#session['pid'].output_limits = (0, 100)
 
-	#session['tempSensor'] = jsonpickle.encode(session['tempSensor'])
-	#session['pwm'] = jsonpickle.encode(session['pwm'])
-	#session['pid'] = jsonpickle.encode(session['pid'])
 	return render_template('index.html')
 
 
@@ -65,7 +55,7 @@ def _get_temp():
 @app.route('/_brew')
 def _brew():
 
-    shardedData['brewTime'] = 1
+    shardedData['brewTime'] = 20
     return jsonify(temp=shardedData['brewTime'])
 
 
@@ -104,14 +94,14 @@ def brew():
 
 	while True:
 
-		if shardedData['brewTime'] == 1:
+		if shardedData['brewTime'] > 0:
 
 			GPIO.setmode(GPIO.BCM)
 			GPIO.setup(24,GPIO.OUT)
 			GPIO.output(24, 1)
 			time.sleep(20)
 			GPIO.output(24, 0)
-			shardedData['brewTime'] = 0
+			shardedData['brewTime'] = shardedData['brewTime']-1
 
 		time.sleep(1)
 
