@@ -66,7 +66,7 @@ def _brew():
     return jsonify(temp=shardedData['brewTime'])
 
 @app.route('/_setTemp110')
-def _setTemp110'():
+def _setTemp110():
 	shardedData['setTemp'] = 110
 	return jsonify(temp=shardedData['setTemp'])
 
