@@ -49,7 +49,9 @@ def _get_temp():
 	d = shardedData['pid_d']
 	brewTime = shardedData['brewTime']
 	waterTemp = shardedData['waterTemp']
-	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d, brew=brewTime)
+	setTemp = shardedData['setTemp']
+	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d,
+	brew=brewTime, setTemp=setTemp)
 
 
 @app.route('/_brew')
@@ -58,6 +60,17 @@ def _brew():
     shardedData['brewTime'] = 20
     return jsonify(temp=shardedData['brewTime'])
 
+@app.route('/_heater110')
+def _heater110():
+
+	shardedData['setTemp'] = 110
+    return jsonify(temp=shardedData['setTemp'])
+
+@app.route('/_heater88')
+def _heater110():
+
+	shardedData['setTemp'] = 88
+    return jsonify(temp=shardedData['setTemp'])
 
 def pid():
 	GPIO.setmode(GPIO.BCM)
@@ -65,17 +78,22 @@ def pid():
 	pwm = GPIO.PWM(23, 60)
 	pwm.start(0)
 
-	pid = PID(20, 0, 200, setpoint=97.5)
+	pid = PID(20, 0, 200, setpoint=shardedData['setTemp'])
 	pid.output_limits = (0, 100)
 	tempSensor = max31865.max31865()
 
 	while True:
 
-		waterTemp=0
+		waterTemp = 0
+		iteration = 0
 
 		while waterTemp<15 or waterTemp>130:
 			waterTemp = tempSensor.readTemp()
 			waterTemp = round(waterTemp,1)
+			iteration = iteration + 1
+
+			if iteration > 10:
+				pwm.ChangeDutyCycle(0)
 
 		control = pid(waterTemp)
 		pwm.ChangeDutyCycle(control)
