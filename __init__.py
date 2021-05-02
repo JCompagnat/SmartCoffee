@@ -65,13 +65,13 @@ def _brew():
     shardedData['brewTime'] = 20
     return jsonify(temp=shardedData['brewTime'])
 
-@app.route('/_heater110')
-def _heater110():
+@app.route('/_setTemp110')
+def _setTemp110'():
 	shardedData['setTemp'] = 110
 	return jsonify(temp=shardedData['setTemp'])
 
-@app.route('/_heater88')
-def _heater88():
+@app.route('/_setTemp88')
+def __setTemp88():
 	shardedData['setTemp'] = 88
 	return jsonify(temp=shardedData['setTemp'])
 
