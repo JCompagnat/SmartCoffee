@@ -80,12 +80,16 @@ def pid():
 	GPIO.setup(23,GPIO.OUT)
 	pwm = GPIO.PWM(23, 60)
 	pwm.start(0)
-
-	pid = PID(20, 0, 200, setpoint=shardedData['setTemp'])
+	targetTemp = shardedData['setTemp']
+	pid = PID(20, 0, 200, setpoint=targetTemp)
 	pid.output_limits = (0, 100)
 	tempSensor = max31865.max31865()
 
 	while True:
+
+		if targetTemp != shardedData['setTemp']:
+			targetTemp = shardedData['setTemp']
+			pid = PID(20, 0, 200, setpoint=targetTemp)		
 
 		waterTemp = 0
 		iteration = 0
