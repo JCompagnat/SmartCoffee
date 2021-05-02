@@ -66,7 +66,7 @@ def _heater110():
 	return jsonify(temp=shardedData['setTemp'])
 
 @app.route('/_heater88')
-def _heater110():
+def _heater88():
 	shardedData['setTemp'] = 88
 	return jsonify(temp=shardedData['setTemp'])
 
