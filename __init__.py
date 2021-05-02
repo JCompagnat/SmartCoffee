@@ -62,15 +62,13 @@ def _brew():
 
 @app.route('/_heater110')
 def _heater110():
-
 	shardedData['setTemp'] = 110
-    return jsonify(temp=shardedData['setTemp'])
+	return jsonify(temp=shardedData['setTemp'])
 
 @app.route('/_heater88')
 def _heater110():
-
 	shardedData['setTemp'] = 88
-    return jsonify(temp=shardedData['setTemp'])
+	return jsonify(temp=shardedData['setTemp'])
 
 def pid():
 	GPIO.setmode(GPIO.BCM)
