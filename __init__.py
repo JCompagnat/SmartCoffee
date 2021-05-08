@@ -25,7 +25,7 @@ def index():
 	shardedData['pid_d'] = 0
 	shardedData['brewTime'] = 0
 	shardedData['waterTemp'] = 0
-	shardedData['setTemp'] = 88
+	shardedData['setTemp'] = 97.5
 
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
@@ -70,9 +70,9 @@ def _setTemp110():
 	shardedData['setTemp'] = 110
 	return jsonify(temp=shardedData['setTemp'])
 
-@app.route('/_setTemp88')
-def __setTemp88():
-	shardedData['setTemp'] = 88
+@app.route('/_setTemp975')
+def __setTemp975():
+	shardedData['setTemp'] = 97.5
 	return jsonify(temp=shardedData['setTemp'])
 
 def pid():
