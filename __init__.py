@@ -94,16 +94,26 @@ def pid():
 		waterTemp = 0
 		iteration = 0
 
-		while waterTemp<15 or waterTemp>130:
+		while isTempValid=False or iteration>10:
 			waterTemp = tempSensor.readTemp()
 			waterTemp = round(waterTemp,1)
+
+			if waterTemp<15 or waterTemp>120:
+				isTempValid = True
+
+			else:
+				isTempValid = False
+
 			iteration = iteration + 1
+			time.sleep(0.5)
 
-			if iteration > 10:
-				pwm.ChangeDutyCycle(0)
+		if isTempValid = True:
+			control = pid(waterTemp)
+			pwm.ChangeDutyCycle(control)
 
-		control = pid(waterTemp)
-		pwm.ChangeDutyCycle(control)
+		else:
+			pwm.ChangeDutyCycle(0)
+
 
 		p, i, d = pid.components
 		shardedData['pid_p']=p
@@ -144,14 +154,6 @@ def brew():
 
 	return
 
-
-#@app.route('/_start_pump')
-#def _start_pump'():
-
-#    tempC=random.randint(30, 110)
-#    #max = max31865.max31865(csPin,misoPin,mosiPin,clkPin)
-#    #tempC = max.readTemp()
-#    return jsonify(temp=tempC)
 
 # run application
 if __name__ == '__main__':
