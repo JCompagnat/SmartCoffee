@@ -94,7 +94,7 @@ def pid():
 		waterTemp = 0
 		iteration = 0
 
-		while isTempValid=False or iteration>10:
+		while isTempValid==False or iteration>10:
 			waterTemp = tempSensor.readTemp()
 			waterTemp = round(waterTemp,1)
 
