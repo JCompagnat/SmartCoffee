@@ -98,7 +98,7 @@ def pid():
 			waterTemp = tempSensor.readTemp()
 			waterTemp = round(waterTemp,1)
 
-			if waterTemp<15 or waterTemp>120:
+			if (waterTemp<15) or (waterTemp>120):
 				isTempValid = True
 
 			else:
@@ -107,7 +107,7 @@ def pid():
 			iteration = iteration + 1
 			time.sleep(0.5)
 
-		if isTempValid = True:
+		if isTempValid == True:
 			control = pid(waterTemp)
 			pwm.ChangeDutyCycle(control)
 
