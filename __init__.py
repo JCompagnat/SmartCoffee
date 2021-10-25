@@ -99,10 +99,10 @@ def pid():
 			waterTemp = round(waterTemp,1)
 
 			if (waterTemp<15) or (waterTemp>120):
-				isTempValid = True
+				isTempValid = False
 
 			else:
-				isTempValid = False
+				isTempValid = True
 
 			iteration = iteration + 1
 			time.sleep(0.5)
