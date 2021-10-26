@@ -118,7 +118,7 @@ def pid():
 		p, i, d = pid.components
 		shardedData['pid_p']=p
 		shardedData['pid_i']=i
-		shardedData['pid_d']=d
+		shardedData['pid_d']=iteration
 		shardedData['pid_control']=control
 		shardedData['waterTemp']=waterTemp
 
