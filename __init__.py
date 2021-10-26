@@ -93,6 +93,7 @@ def pid():
 
 		waterTemp = 0
 		iteration = 0
+		isTempValid = 0
 
 		while (isTempValid==False):
 			waterTemp = tempSensor.readTemp()
