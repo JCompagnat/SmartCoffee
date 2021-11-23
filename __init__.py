@@ -138,8 +138,8 @@ def brew():
 
 			while shardedData['brewTime'] > 0:
 
-				maxTemp = shardedData['setTemp'] + 1
-				minTemp = shardedData['setTemp'] - 1
+				maxTemp = shardedData['setTemp'] + 25
+				minTemp = shardedData['setTemp'] - 25
 
 				if minTemp <= shardedData['waterTemp'] <= maxTemp:
 					GPIO.output(24, 1)
