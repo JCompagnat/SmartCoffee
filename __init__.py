@@ -77,8 +77,8 @@ def __setTemp975():
 
 def pid():
 	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(23,GPIO.OUT)
-	pwm = GPIO.PWM(23, 60)
+	GPIO.setup(19,GPIO.OUT)
+	pwm = GPIO.PWM(19, 60)
 	pwm.start(0)
 	targetTemp = shardedData['setTemp']
 	pid = PID(20, 0, 200, setpoint=targetTemp)
@@ -134,7 +134,7 @@ def brew():
 		if shardedData['brewTime'] > 0:
 
 			GPIO.setmode(GPIO.BCM)
-			GPIO.setup(24,GPIO.OUT)
+			GPIO.setup(26,GPIO.OUT)
 
 			while shardedData['brewTime'] > 0:
 
@@ -142,14 +142,14 @@ def brew():
 				minTemp = shardedData['setTemp'] - 25
 
 				if minTemp <= shardedData['waterTemp'] <= maxTemp:
-					GPIO.output(24, 1)
+					GPIO.output(26, 1)
 					time.sleep(1)
 					shardedData['brewTime'] = shardedData['brewTime']-1
 
 				else:
-					GPIO.output(24, 0)
+					GPIO.output(26, 0)
 
-			GPIO.output(24, 0)
+			GPIO.output(26, 0)
 
 		time.sleep(0.5)
 
