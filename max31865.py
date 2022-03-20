@@ -34,7 +34,7 @@ class max31865(object):
            3rd and 4th degree parts of the polynomial) and the straight line approx.
            temperature is calculated with the quadratic formula one being the most accurate.
         """
-        def __init__(self, csPin = 5, misoPin = 9, mosiPin = 10, clkPin = 11):
+        def __init__(self, csPin = 4, misoPin = 9, mosiPin = 10, clkPin = 11):
                 self.csPin = csPin
                 self.misoPin = misoPin
                 self.mosiPin = mosiPin
