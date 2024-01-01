@@ -46,7 +46,7 @@ def plex():
 	return render_template('plex.html')
 
 @app.route('/slideshow')
-def plex():
+def slideShow():
 	return render_template('slideShow.html')
 
 @app.route('/_get_temp')
