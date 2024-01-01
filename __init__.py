@@ -45,6 +45,9 @@ def ManualOperations():
 def plex():
 	return render_template('plex.html')
 
+@app.route('/slideshow')
+def plex():
+	return render_template('slideShow.html')
 
 @app.route('/_get_temp')
 def _get_temp():
