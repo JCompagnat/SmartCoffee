@@ -23,8 +23,14 @@ img {vertical-align: middle;}
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 1024px;
-  position: relative;
+	display: grid;
+  height: 100%;
+  margin: auto;
+}
+
+.center-fit {
+  max-width: 100%;
+  max-height: 100vh;
   margin: auto;
 }
 
@@ -55,7 +61,7 @@ img {vertical-align: middle;}
 /* Fading animation */
 .fade {
   animation-name: fade;
-  animation-duration: 1.5s;
+  animation-duration: 10s;
 }
 
 @keyframes fade {
@@ -75,42 +81,42 @@ img {vertical-align: middle;}
 
 <div class="mySlides fade">
   <div class="numbertext">1 / 8</div>
-  <img src="{{ url_for("static", filename="IMG_1.jpeg") }}" style="height:100%">
+  <img class="center-fit" src="{{ url_for("static", filename="IMG_1.jpeg") }}" style="height:100%">
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">2 / 8</div>
-  <img src="{{ url_for("static", filename="IMG_2.jpeg") }}" style="height:100%">
+  <img class="center-fit" src="{{ url_for("static", filename="IMG_2.jpeg") }}" style="height:100%">
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">3 / 8</div>
-  <img src="{{ url_for("static", filename="IMG_3.jpeg") }}" style="height:100%">
+  <img class="center-fit" src="{{ url_for("static", filename="IMG_3.jpeg") }}" style="height:100%">
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">4 / 8</div>
-  <img src="{{ url_for("static", filename="IMG_4.jpeg") }}" style="height:100%">
+  <img class="center-fit" src="{{ url_for("static", filename="IMG_4.jpeg") }}" style="height:100%">
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">5 / 8</div>
-  <img src="{{ url_for("static", filename="IMG_5.jpeg") }}" style="height:100%">
+  <img class="center-fit" src="{{ url_for("static", filename="IMG_5.jpeg") }}" style="height:100%">
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">6 / 8</div>
-  <img src="{{ url_for("static", filename="IMG_6.jpeg") }}" style="height:100%">
+  <img class="center-fit" src="{{ url_for("static", filename="IMG_6.jpeg") }}" style="height:100%">
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">7 / 8</div>
-  <img src="{{ url_for("static", filename="IMG_7.jpeg") }}" style="height:100%">
+  <img class="center-fit" src="{{ url_for("static", filename="IMG_7.jpeg") }}" style="height:100%">
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">8 / 8</div>
-  <img src="{{ url_for("static", filename="IMG_8.jpeg") }}" style="height:100%">
+  <img class="center-fit" src="{{ url_for("static", filename="IMG_8.jpeg") }}" style="height:100%">
 </div>
 
 </div>
