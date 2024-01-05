@@ -111,7 +111,10 @@ def pid():
 			iteration = iteration + 1
 			time.sleep(0.5)
 
-		if isTempValid == True:
+		if shardedData['brewTime'] > 0:
+			pwm.ChangeDutyCycle(100)
+
+		elif isTempValid == True:
 			control = pid(waterTemp)
 			pwm.ChangeDutyCycle(control)
 
