@@ -33,7 +33,7 @@ def index():
 	worker_1.start()
 	worker_2.start()
 
-	return render_template('index.html')
+	return render_template('manualoperations.html')
 
 
 @app.route('/manualoperations')
