@@ -15,31 +15,26 @@ app.secret_key = 'BAD_SECRET_KEY'
 manager = multiprocessing.Manager()
 shardedData = manager.dict()
 
-
+def initialize_shared_data():
+    shardedData['pid_p'] = 0
+    shardedData['pid_i'] = 0
+    shardedData['pid_d'] = 0
+    shardedData['brewTime'] = 0
+    shardedData['waterTemp'] = 0
+    shardedData['setTemp'] = 97.5
 
 @app.route('/')  # the default is GET only
 def index():
-
-	shardedData['pid_p'] = 0
-	shardedData['pid_i'] = 0
-	shardedData['pid_d'] = 0
-	shardedData['brewTime'] = 0
-	shardedData['waterTemp'] = 0
-	shardedData['setTemp'] = 97.5
-
+    initialize_shared_data()
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
-
 	worker_1.start()
 	worker_2.start()
-
 	return render_template('manualoperations.html')
-
 
 @app.route('/manualoperations')
-def ManualOperations():
-	return render_template('manualoperations.html')
-
+def manual_operations():
+    return render_template('manualoperations.html')	
 
 @app.route('/plex')
 def plex():
@@ -51,7 +46,6 @@ def slideShow():
 
 @app.route('/_get_temp')
 def _get_temp():
-
 	p = shardedData['pid_p']
 	i = shardedData['pid_i']
 	d = shardedData['pid_d']
@@ -64,7 +58,6 @@ def _get_temp():
 
 @app.route('/_brew')
 def _brew():
-
     shardedData['brewTime'] = 20
     return jsonify(temp=shardedData['brewTime'])
 
