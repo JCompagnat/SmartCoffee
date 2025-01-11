@@ -17,12 +17,12 @@ shardedData = manager.dict()
 
 @app.route('/')  # the default is GET only
 def index():
-    shardedData['pid_p'] = 0
-    shardedData['pid_i'] = 0
-    shardedData['pid_d'] = 0
-    shardedData['brewTime'] = 0
-    shardedData['waterTemp'] = 0
-    shardedData['setTemp'] = 97.5
+	shardedData['pid_p'] = 0
+	shardedData['pid_i'] = 0
+	shardedData['pid_d'] = 0
+	shardedData['brewTime'] = 0
+	shardedData['waterTemp'] = 0
+	shardedData['setTemp'] = 97.5
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
 	worker_1.start()
