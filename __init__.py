@@ -15,6 +15,8 @@ app.secret_key = 'BAD_SECRET_KEY'
 manager = multiprocessing.Manager()
 shardedData = manager.dict()
 
+@app.route('/')  # the default is GET only
+
 def initialize_shared_data():
     shardedData['pid_p'] = 0
     shardedData['pid_i'] = 0
@@ -23,7 +25,6 @@ def initialize_shared_data():
     shardedData['waterTemp'] = 0
     shardedData['setTemp'] = 97.5
 
-@app.route('/')  # the default is GET only
 def index():
     initialize_shared_data()
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
