@@ -30,7 +30,7 @@ def index():
 	return render_template('manualoperations.html')
 
 @app.route('/manualoperations')
-def manual_operations():
+def ManualOperations():
     return render_template('manualoperations.html')	
 
 @app.route('/plex')
