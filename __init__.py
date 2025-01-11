@@ -95,7 +95,7 @@ def pid():
 			waterTemp = tempSensor.readTemp()
 			waterTemp = round(waterTemp,1)
 
-			if (waterTemp<15) or (waterTemp>130):
+			if (waterTemp<15) or (waterTemp>120):
 				isTempValid = False
 
 			else:
