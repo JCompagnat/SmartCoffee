@@ -27,7 +27,7 @@ def index():
 	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
 	worker_1.start()
 	worker_2.start()
-	return render_template('manualoperations.html')
+	return render_template('index.html')
 
 @app.route('/manualoperations')
 def ManualOperations():
