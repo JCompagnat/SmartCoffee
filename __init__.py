@@ -109,10 +109,7 @@ def pid():
 			iteration = iteration + 1
 			time.sleep(0.5)
 
-		if shardedData['brewTime'] > 0:
-			pwm.ChangeDutyCycle(100)
-
-		elif isTempValid == True:
+		if isTempValid == True:
 			control = pid(waterTemp)
 			pwm.ChangeDutyCycle(control)
 
@@ -128,8 +125,6 @@ def pid():
 
 		time.sleep(1)
 
-	return
-
 def brew():
 
 	while True:
@@ -140,7 +135,6 @@ def brew():
 			while shardedData['brewTime'] > 0:
 				time.sleep(1)
 				shardedData['brewTime'] -= 1
-		else:
 			GPIO.output(26, 0)
 
 		time.sleep(0.5)
