@@ -119,7 +119,6 @@ def pid():
 		else:
 			pwm.ChangeDutyCycle(0)
 
-
 		p, i, d = pid.components
 		shardedData['pid_p']=p
 		shardedData['pid_i']=i
@@ -137,17 +136,14 @@ def brew():
 		if shardedData['brewTime'] > 0:
 			GPIO.setmode(GPIO.BCM)
 			GPIO.setup(26,GPIO.OUT)
-
+			GPIO.output(26, 1)
 			while shardedData['brewTime'] > 0:
-				GPIO.output(26, 1)
 				time.sleep(1)
-				shardedData['brewTime'] = shardedData['brewTime']-1
-
+				shardedData['brewTime'] -= 1
 		else:
 			GPIO.output(26, 0)
 
 		time.sleep(0.5)
-
 	return
 
 
