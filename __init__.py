@@ -61,6 +61,11 @@ def _brew():
     shardedData['brewTime'] = 20
     return jsonify(temp=shardedData['brewTime'])
 
+@app.route('/_purge')
+def _purge():
+    shardedData['brewTime'] = 1
+    return jsonify(temp=shardedData['brewTime'])
+
 @app.route('/_setTemp110')
 def _setTemp110():
 	shardedData['setTemp'] = 110
@@ -129,25 +134,16 @@ def pid():
 def brew():
 
 	while True:
-
 		if shardedData['brewTime'] > 0:
-
 			GPIO.setmode(GPIO.BCM)
 			GPIO.setup(26,GPIO.OUT)
 
 			while shardedData['brewTime'] > 0:
+				GPIO.output(26, 1)
+				time.sleep(1)
+				shardedData['brewTime'] = shardedData['brewTime']-1
 
-				maxTemp = shardedData['setTemp'] + 25
-				minTemp = shardedData['setTemp'] - 25
-
-				if minTemp <= shardedData['waterTemp'] <= maxTemp:
-					GPIO.output(26, 1)
-					time.sleep(1)
-					shardedData['brewTime'] = shardedData['brewTime']-1
-
-				else:
-					GPIO.output(26, 0)
-
+		else:
 			GPIO.output(26, 0)
 
 		time.sleep(0.5)

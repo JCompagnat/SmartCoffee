@@ -43,6 +43,16 @@
 		});
 	});
 
+	$(function() {
+		$('a#purgeButton').bind('click', function() {
+			$.getJSON('/SmartCoffee/_purge',
+			function(data) {
+				//do nothing
+			});
+			return false;
+		});
+	});
+	
 	setInterval("my_function();",500);
 
 	function my_function(){
@@ -100,6 +110,7 @@
 		<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
 		<a href=# id=temp975Button><button class='btn btn-default'>temp 97.5</button></a>
 		<a href=# id=temp110Button><button class='btn btn-default'>temp 110</button></a>
+		<a href=# id=purgeButton><button class='btn btn-default'>purge 1 sec</button></a>
 
 
 	</div>
