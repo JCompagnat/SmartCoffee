@@ -28,10 +28,12 @@ def index():
 	initialize_shared_data()
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
+<<<<<<< HEAD
 	worker_3 = multiprocessing.Process(name='worker 3', target=status)
+=======
+>>>>>>> parent of 33e33ae (fix indentation and add brew light)
 	worker_1.start()
 	worker_2.start()
-	worker_3.start()
 	return render_template('manualoperations.html')
 
 @app.route('/manualoperations')
@@ -54,9 +56,8 @@ def _get_temp():
 	brewTime = shardedData['brewTime']
 	waterTemp = shardedData['waterTemp']
 	setTemp = shardedData['setTemp']
-	brewLight = shardedData['brewLight']
 	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d,
-	brew=brewTime, setTemp=setTemp, brewLight=brewLight)
+	brew=brewTime, setTemp=setTemp)
 
 
 @app.route('/_brew')
@@ -129,6 +130,7 @@ def pid():
 		time.sleep(1)
 
 def brew():
+
 	while True:
 		if shardedData['brewTime'] > 0:
 			GPIO.setmode(GPIO.BCM)
@@ -142,6 +144,7 @@ def brew():
 		time.sleep(0.5)
 	return
 
+<<<<<<< HEAD
 def status():
 	while True:
 		tempLimit = 0.5
@@ -154,6 +157,8 @@ def status():
 		time.sleep(0.5)
 	return
 
+=======
+>>>>>>> parent of 33e33ae (fix indentation and add brew light)
 
 # run application
 if __name__ == '__main__':
