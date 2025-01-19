@@ -1,6 +1,5 @@
-
 # initialize application
-from flask import Flask, jsonify, render_template, request, url_for, session
+from flaskw import Flask, jsonify, render_template, request, url_for, session
 
 import time, math
 import RPi.GPIO as GPIO
@@ -22,6 +21,7 @@ def initialize_shared_data():
 	shardedData['brewTime'] = 0
 	shardedData['waterTemp'] = 0
 	shardedData['setTemp'] = 97.5
+	shardedData['brewLight'] = True
 
 @app.route('/')  # the default is GET only
 def index():
@@ -147,7 +147,7 @@ def status():
 		tempLimit = 0.5
 		temp = shardedData['waterTemp']
 		target = hardedData['setTemp']
-		if target - tempLimit < temp > target + tempLimit:
+		if target - tempLimit < temp < target + tempLimit:
 			shardedData['brewLight'] = True
 		else:
 			shardedData['brewLight'] = False
