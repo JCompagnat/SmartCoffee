@@ -53,7 +53,7 @@
 		});
 	});
 	
-	setInterval("my_function();",500);
+	setInterval(my_function, 500);
 
 	function my_function(){
 		$.getJSON('/SmartCoffee/_get_temp', {},
@@ -66,19 +66,21 @@
 			$("#setTemp").text(data.setTemp);
 			$("#brewLight").text(data.brewLight);
 
+			// Toggle light based on brewLight value
+            toggleLight(data.brewLight);
 		});
-
-		function toggleLight(isOn) {
-            var light = document.getElementById('lightIndicator');
-            if (light === 1 {
-                light.className = 'light-on';
-            } else {
-                light.className = 'light-off';
-            }
-        }
 
 		return false;
 	};
+
+	function toggleLight(isOn) {
+        var light = document.getElementById('lightIndicator');
+        if (isOn) {
+            light.className = 'light-on';
+        } else {
+            light.className = 'light-off';
+        }
+    }
 
 </script>
 
