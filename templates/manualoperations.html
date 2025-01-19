@@ -1,139 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="apple-mobile-web-app-capable">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<meta name = "viewport" content = "user-scalable=no, width=device-width">
-	<!-- Bootstrap CSS & custom CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-	<link rel="stylesheet" type= "text/css" href="{{ url_for("static", filename="style.css") }}">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script type=text/javascript>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="user-scalable=no, width=device-width">
+    <!-- Bootstrap CSS & custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Bootstrap JS & jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" defer></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" defer></script>
+    <script type="text/javascript" defer>
+        $(document).ready(function() {
+            // Define reusable variables
+            var currentTemp = $("#currentTemp");
+            var commandP = $("#commandP");
+            var commandI = $("#commandI");
+            var commandD = $("#commandD");
+            var brewTime = $("#brewTime");
+            var setTemp = $("#setTemp");
+            var brewLight = $("#brewLight");
+            var lightIndicator = document.getElementById('lightIndicator');
 
-	$(function() {
-		$('a#brewButton').bind('click', function() {
-			$.getJSON('/SmartCoffee/_brew',
-			function(data) {
-				//do nothing
-			});
-			return false;
-		});
-	});
+            $('#brewButton').click(function() {
+                $.getJSON('/SmartCoffee/_brew', function(data) {
+                    // do nothing
+                });
+                return false;
+            });
 
-	$(function() {
-		$('a#temp975Button').bind('click', function() {
-			$.getJSON('/SmartCoffee/_setTemp975',
-			function(data) {
-				//do nothing
-			});
-			return false;
-		});
-	});
+            $('#temp110Button').click(function() {
+                $.getJSON('/SmartCoffee/_setTemp110', function(data) {
+                    // do nothing
+                });
+                return false;
+            });
 
-	$(function() {
-		$('a#temp110Button').bind('click', function() {
-			$.getJSON('/SmartCoffee/_setTemp110',
-			function(data) {
-				//do nothing
-			});
-			return false;
-		});
-	});
+            $('#purgeButton').click(function() {
+                $.getJSON('/SmartCoffee/_purge', function(data) {
+                    // do nothing
+                });
+                return false;
+            });
 
-	$(function() {
-		$('a#purgeButton').bind('click', function() {
-			$.getJSON('/SmartCoffee/_purge',
-			function(data) {
-				//do nothing
-			});
-			return false;
-		});
-	});
-	
-	setInterval(my_function, 500);
+            setInterval(my_function, 500);
 
-	function my_function(){
-		$.getJSON('/SmartCoffee/_get_temp', {},
-		function(data) {
-			$("#currentTemp").text(data.temp);
-			$("#commandP").text(data.commandP);
-			$("#commandI").text(data.commandI);
-			$("#commandD").text(data.commandD);
-			$("#brewTime").text(data.brew);
-			$("#setTemp").text(data.setTemp);
-			$("#brewLight").text(data.brewLight);
+            function my_function() {
+                $.getJSON('/SmartCoffee/_get_temp', {}, function(data) {
+                    currentTemp.text(data.temp);
+                    commandP.text(data.commandP);
+                    commandI.text(data.commandI);
+                    commandD.text(data.commandD);
+                    brewTime.text(data.brew);
+                    setTemp.text(data.setTemp);
+                    brewLight.text(data.brewLight);
 
-			// Toggle light based on brewLight value
-            toggleLight(data.brewLight);
-		});
+                    // Toggle light based on brewLight value
+                    toggleLight(data.brewLight);
+                });
 
-		return false;
-	};
+                return false;
+            }
 
-	function toggleLight(isOn) {
-        var light = document.getElementById('lightIndicator');
-        if (isOn) {
-            light.className = 'light-on';
-        } else {
-            light.className = 'light-off';
-        }
-    }
-
-</script>
-
-<title>Smart Coffee </title>
+            function toggleLight(isOn) {
+                if (isOn) {
+                    lightIndicator.className = 'light-on';
+                } else {
+                    lightIndicator.className = 'light-off';
+                }
+            }
+        });
+    </script>
+    <title>Smart Coffee</title>
 </head>
-
 <body>
+    {% include 'sidenavigation.html' %}
+    <div id="mainscreen" class="mainscreen">
+        <form name="data" method='POST'>
+            <label for="customRange1" class="form-label">Example range</label>
+            <output id="amount" name="amount" for="targetTemp">0</output>
+            <input type="range" class="form-range" min="90" max="130" value="98" id="targetTemp" oninput="amount.value=targetTemp.value">
+            <output id="amount" name="amount" for="targetTemp">98</output>
 
-	{% include 'sidenavigation.html' %}
+            <label for="setTemp">Current temperature:</label>
+            <p id="setTemp">This is some text in a paragraph.</p>
 
-	<div id="mainscreen" class="mainscreen">
-		<form name="data"  method='POST'>
+            <label for="currentTemp">Current temperature:</label>
+            <p id="currentTemp">This is some text in a paragraph.</p>
 
-			<label for="customRange1" class="form-label">Example range</label>
-			<output id="amount" name="amount" for="targetTemp">0</output>
-			<input type="range" class="form-range" min="90" max="130"
-			value="98" id="targetTemp" oninput="amount.value=targetTemp.value">
-			<output id="amount" name="amount" for="targetTemp">98</output>
+            <label for="commandP">Command P:</label>
+            <p id="commandP">This is some text in a paragraph.</p>
 
-			<label for="setTemp">Current temperature:</label>
-			<p id=setTemp>This is some text in a paragraph.</p>
+            <label for="commandI">Command I:</label>
+            <p id="commandI">This is some text in a paragraph.</p>
 
-			<label for="currentTemp">Current temperature:</label>
-			<p id=currentTemp>This is some text in a paragraph.</p>
+            <label for="commandD">Command D:</label>
+            <p id="commandD">This is some text in a paragraph.</p>
 
-			<label for="commandP">Command P:</label>
-			<p id=commandP>This is some text in a paragraph.</p>
+            <label for="brewTime">Brew time:</label>
+            <p id="brewTime">This is some text in a paragraph.</p>
 
-			<label for="commandI">Command I:</label>
-			<p id=commandI>This is some text in a paragraph.</p>
+            <!-- Light indicator -->
+            <label for="lightIndicator">Light Indicator:</label>
+            <div id="lightIndicator" class="light-off"></div>
 
-			<label for="commandD">Command D:</label>
-			<p id=commandD>This is some text in a paragraph.</p>
-
-			<label for="brew?">Brew time:</label>
-			<p id=brewTime>This is some text in a paragraph.</p>
-
-			<!-- Light indicator -->
-       		<label for="lightIndicator">Light Indicator:</label>
-      		<div id="lightIndicator" class="light-off"></div>
-
-		</form>
-
-		<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
-		<a href=# id=temp975Button><button class='btn btn-default'>temp 97.5</button></a>
-		<a href=# id=temp110Button><button class='btn btn-default'>temp 110</button></a>
-		<a href=# id=purgeButton><button class='btn btn-default'>purge 1 sec</button></a>
-
-
-	</div>
-
-
+            <!-- Buttons -->
+            <button id="brewButton" class="btn btn-primary">Brew</button>
+            <button id="temp110Button" class="btn btn-secondary">Set Temp to 110</button>
+            <button id="purgeButton" class="btn btn-danger">Purge</button>
+        </form>
+    </div>
 </body>
-
-
 </html>
