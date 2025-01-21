@@ -12,64 +12,55 @@
     <!-- Bootstrap JS & jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" defer></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" defer></script>
-	<script type=text/javascript>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Define reusable variables
+            var currentTemp = $("#currentTemp");
+            var commandP = $("#commandP");
+            var commandI = $("#commandI");
+            var commandD = $("#commandD");
+            var brewTime = $("#brewTime");
+            var setTemp = $("#setTemp");
+            var brewLight = $("#brewLight");
+            var lightIndicator = document.getElementById('lightIndicator');
 
-		$(function() {
-			$('a#brewButton').bind('click', function() {
-				$.getJSON('/SmartCoffee/_brew',
-				function(data) {
-					//do nothing
-				});
-				return false;
-			});
-		});
-	
-		$(function() {
-			$('a#temp975Button').bind('click', function() {
-				$.getJSON('/SmartCoffee/_setTemp975',
-				function(data) {
-					//do nothing
-				});
-				return false;
-			});
-		});
-	
-		$(function() {
-			$('a#temp110Button').bind('click', function() {
-				$.getJSON('/SmartCoffee/_setTemp110',
-				function(data) {
-					//do nothing
-				});
-				return false;
-			});
-		});
-	
-		$(function() {
-			$('a#purgeButton').bind('click', function() {
-				$.getJSON('/SmartCoffee/_purge',
-				function(data) {
-					//do nothing
-				});
-				return false;
-			});
-		});
-		
-		setInterval("my_function();",500);
-	
-		function my_function(){
-			$.getJSON('/SmartCoffee/_get_temp', {},
-			function(data) {
-				$("#currentTemp").text(data.temp);
-				$("#commandP").text(data.commandP);
-				$("#commandI").text(data.commandI);
-				$("#commandD").text(data.commandD);
-				$("#brewTime").text(data.brew);
-				$("#setTemp").text(data.setTemp);
-	
-	
-			});
-			return false;
-		};
+            $('a#brewButton').click(function() {
+                $.getJSON('/SmartCoffee/_brew', function(data) {
+                    // do nothing
+                });
+                return false;
+            });
+
+            $('a#temp110Button').click(function() {
+                $.getJSON('/SmartCoffee/_setTemp110', function(data) {
+                    // do nothing
+                });
+                return false;
+            });
+
+            $('a#purgeButton').click(function() {
+                $.getJSON('/SmartCoffee/_purge', function(data) {
+                    // do nothing
+                });
+                return false;
+            });
+
+            setInterval(my_function, 500);
+
+            function my_function() {
+                $.getJSON('/SmartCoffee/_get_temp', {}, function(data) {
+                    currentTemp.text(data.temp);
+                    commandP.text(data.commandP);
+                    commandI.text(data.commandI);
+                    commandD.text(data.commandD);
+                    brewTime.text(data.brew);
+                    setTemp.text(data.setTemp);
+                    brewLight.text(data.brewLight);
+                });
+
+                return false;
+            }
+        });
     </script>
     <title>Smart Coffee</title>
 </head>
