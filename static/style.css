@@ -45,3 +45,19 @@
   .sidenav2 {padding-top: 15px;}
   .sidenav2 a {font-size: 18px;}
 }
+
+.light-off {
+  width: 20px;
+  height: 20px;
+  background-color: grey;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.light-on {
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+}

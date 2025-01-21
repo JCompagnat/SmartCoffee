@@ -24,7 +24,6 @@
 			});
 		});
 	
-<<<<<<< HEAD
 		$(function() {
 			$('a#temp975Button').bind('click', function() {
 				$.getJSON('/SmartCoffee/_setTemp975',
@@ -73,28 +72,6 @@
 		};
     </script>
     <title>Smart Coffee</title>
-=======
-	setInterval("my_function();",500);
-
-	function my_function(){
-		$.getJSON('/SmartCoffee/_get_temp', {},
-		function(data) {
-			$("#currentTemp").text(data.temp);
-			$("#commandP").text(data.commandP);
-			$("#commandI").text(data.commandI);
-			$("#commandD").text(data.commandD);
-			$("#brewTime").text(data.brew);
-			$("#setTemp").text(data.setTemp);
-
-
-		});
-		return false;
-	};
-
-</script>
-
-<title>Smart Coffee </title>
->>>>>>> parent of 33e33ae (fix indentation and add brew light)
 </head>
 <body>
     {% include 'sidenavigation.html' %}
@@ -123,28 +100,8 @@
             <label for="brewTime">Brew time:</label>
             <p id="brewTime">This is some text in a paragraph.</p>
 
-<<<<<<< HEAD
             <label for="brewLight">Brew time:</label>
             <p id="brewLight">This is some text in a paragraph.</p>
-=======
-			<label for="commandI">Command I:</label>
-			<p id=commandI>This is some text in a paragraph.</p>
-
-			<label for="commandD">Command D:</label>
-			<p id=commandD>This is some text in a paragraph.</p>
-
-			<label for="brew?">Brew time:</label>
-			<p id=brewTime>This is some text in a paragraph.</p>
-		</form>
-
-		<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
-		<a href=# id=temp975Button><button class='btn btn-default'>temp 97.5</button></a>
-		<a href=# id=temp110Button><button class='btn btn-default'>temp 110</button></a>
-		<a href=# id=purgeButton><button class='btn btn-default'>purge 1 sec</button></a>
-
-
-	</div>
->>>>>>> parent of 33e33ae (fix indentation and add brew light)
 
             <!-- Light indicator -->
             <label for="lightIndicator">Light Indicator:</label>
