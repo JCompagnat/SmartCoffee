@@ -64,19 +64,9 @@
 			$("#commandD").text(data.commandD);
 			$("#brewTime").text(data.brew);
 			$("#setTemp").text(data.setTemp);
-			$("#brewLight").text(data.brewLight);
+
 
 		});
-
-		function toggleLight(isOn) {
-            var light = document.getElementById('lightIndicator');
-            if (light === 1 {
-                light.className = 'light-on';
-            } else {
-                light.className = 'light-off';
-            }
-        }
-
 		return false;
 	};
 
@@ -115,11 +105,6 @@
 
 			<label for="brew?">Brew time:</label>
 			<p id=brewTime>This is some text in a paragraph.</p>
-
-			<!-- Light indicator -->
-       		<label for="lightIndicator">Light Indicator:</label>
-      		<div id="lightIndicator" class="light-off"></div>
-
 		</form>
 
 		<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
