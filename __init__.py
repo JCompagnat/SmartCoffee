@@ -148,9 +148,9 @@ def status():
 		temp = shardedData['waterTemp']
 		target = hardedData['setTemp']
 		if target - tempLimit < temp > target + tempLimit:
-			shardedData['brewLight'] = True
+			shardedData['brewLight'] = 1
 		else:
-			shardedData['brewLight'] = False
+			shardedData['brewLight'] = 0
 		time.sleep(0.5)
 	return
 
