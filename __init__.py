@@ -55,7 +55,6 @@ def _get_temp():
 	return jsonify(temp=waterTemp, commandP=p, commandI=i,commandD=d,
 	brew=brewTime, setTemp=setTemp)
 
-
 @app.route('/_brew')
 def _brew():
     shardedData['brewTime'] = 20
