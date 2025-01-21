@@ -56,9 +56,20 @@
                     brewTime.text(data.brew);
                     setTemp.text(data.setTemp);
                     brewLight.text(data.brewLight);
+
+                    // Toggle light based on brewLight value
+                    toggleLight(data.brewLight);
                 });
 
                 return false;
+            }
+
+            function toggleLight(isOn) {
+                if (isOn) {
+                    lightIndicator.className = 'light-on';
+                } else {
+                    lightIndicator.className = 'light-off';
+                }
             }
         });
     </script>
@@ -90,9 +101,6 @@
 
             <label for="brewTime">Brew time:</label>
             <p id="brewTime">This is some text in a paragraph.</p>
-
-            <label for="brewLight">Brew time:</label>
-            <p id="brewLight">This is some text in a paragraph.</p>
 
             <!-- Light indicator -->
             <label for="lightIndicator">Light Indicator:</label>
