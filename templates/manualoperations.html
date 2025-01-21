@@ -12,7 +12,7 @@
     <!-- Bootstrap JS & jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" defer></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" defer></script>
-    <script type="text/javascript">
+    <script type="text/javascript" defer>
         $(document).ready(function() {
             // Define reusable variables
             var currentTemp = $("#currentTemp");
@@ -24,21 +24,21 @@
             var brewLight = $("#brewLight");
             var lightIndicator = document.getElementById('lightIndicator');
 
-            $('a#brewButton').click(function() {
+            $('#brewButton').click(function() {
                 $.getJSON('/SmartCoffee/_brew', function(data) {
                     // do nothing
                 });
                 return false;
             });
 
-            $('a#temp110Button').click(function() {
+            $('#temp110Button').click(function() {
                 $.getJSON('/SmartCoffee/_setTemp110', function(data) {
                     // do nothing
                 });
                 return false;
             });
 
-            $('a#purgeButton').click(function() {
+            $('#purgeButton').click(function() {
                 $.getJSON('/SmartCoffee/_purge', function(data) {
                     // do nothing
                 });
@@ -99,10 +99,9 @@
             <div id="lightIndicator" class="light-off"></div>
 
             <!-- Buttons -->
-			<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
-			<a href=# id=temp975Button><button class='btn btn-default'>temp 97.5</button></a>
-			<a href=# id=temp110Button><button class='btn btn-default'>temp 110</button></a>
-			<a href=# id=purgeButton><button class='btn btn-default'>purge 1 sec</button></a>
+            <button id="brewButton" class="btn btn-primary">Brew</button>
+            <button id="temp110Button" class="btn btn-secondary">Set Temp to 110</button>
+            <button id="purgeButton" class="btn btn-danger">Purge</button>
         </form>
     </div>
 </body>
