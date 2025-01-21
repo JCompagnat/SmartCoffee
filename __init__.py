@@ -1,5 +1,5 @@
 # initialize application
-from flask import Flask, jsonify, render_template, request, url_for, session
+from flaskw import Flask, jsonify, render_template, request, url_for, session
 
 import time, math
 import RPi.GPIO as GPIO
