@@ -28,7 +28,7 @@ def index():
 	initialize_shared_data()
 	worker_1 = multiprocessing.Process(name='worker 1', target=pid)
 	worker_2 = multiprocessing.Process(name='worker 2', target=brew)
-	worker_3 = multiprocessing.Process(name='worker 3', target=status)
+	worker_3 = multiprocessing.Process(name='worker 2', target=status)
 	worker_1.start()
 	worker_2.start()
 	worker_3.start()
