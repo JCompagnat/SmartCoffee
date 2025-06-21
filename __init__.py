@@ -6,6 +6,7 @@ import multiprocessing
 from simple_pid import PID
 import jsonpickle
 import logging
+import sys
 
 # ==========================
 # Platform-agnostic imports
@@ -141,3 +142,10 @@ if __name__ == '__main__':
     initialize_shared_data()
     start_workers()
     application.run(debug=True)
+
+# ================
+# Apache mod_wsgi init
+# ================
+if 'mod_wsgi' in sys.modules:
+    initialize_shared_data()
+    start_workers()
