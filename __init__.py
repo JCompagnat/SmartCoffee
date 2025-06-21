@@ -148,7 +148,7 @@ def start_server():
     shardedData = manager.dict()
     initialize_shared_data(shardedData)
     register_routes(app, shardedData)
-    app.run(host='0.0.0.0', port=5050)
+    app.run(host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':
     multiprocessing.set_start_method("spawn")
