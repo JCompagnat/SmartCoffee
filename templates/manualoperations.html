@@ -1,122 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="apple-mobile-web-app-capable">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<meta name = "viewport" content = "user-scalable=no, width=device-width">
-	<!-- Bootstrap CSS & custom CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-	<link rel="stylesheet" type= "text/css" href="{{ url_for("static", filename="style.css") }}">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script type=text/javascript>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Coffee</title>
 
-	$(function() {
-		$('a#brewButton').bind('click', function() {
-			$.getJSON('/SmartCoffee/_brew',
-			function(data) {
-				//do nothing
-			});
-			return false;
-		});
-	});
+  <!-- Favicon -->
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-	$(function() {
-		$('a#temp975Button').bind('click', function() {
-			$.getJSON('/SmartCoffee/_setTemp975',
-			function(data) {
-				//do nothing
-			});
-			return false;
-		});
-	});
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 
-	$(function() {
-		$('a#temp110Button').bind('click', function() {
-			$.getJSON('/SmartCoffee/_setTemp110',
-			function(data) {
-				//do nothing
-			});
-			return false;
-		});
-	});
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-	$(function() {
-		$('a#purgeButton').bind('click', function() {
-			$.getJSON('/SmartCoffee/_purge',
-			function(data) {
-				//do nothing
-			});
-			return false;
-		});
-	});
-	
-	setInterval("my_function();",500);
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-	function my_function(){
-		$.getJSON('/SmartCoffee/_get_temp', {},
-		function(data) {
-			$("#currentTemp").text(data.temp);
-			$("#commandP").text(data.commandP);
-			$("#commandI").text(data.commandI);
-			$("#commandD").text(data.commandD);
-			$("#brewTime").text(data.brew);
-			$("#setTemp").text(data.setTemp);
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-		});
-		return false;
-	};
-
-</script>
-
-<title>Smart Coffee </title>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body>
+<body class="container-fluid py-4">
 
-	{% include 'sidenavigation.html' %}
+  {% include 'sidenavigation.html' %}
 
-	<div id="mainscreen" class="mainscreen">
-		<form name="data"  method='POST'>
+  <h1 class="mb-4 text-center">☕ Contrôle Manuel – Smart Coffee</h1>
 
-			<label for="customRange1" class="form-label">Example range</label>
-			<output id="amount" name="amount" for="targetTemp">0</output>
-			<input type="range" class="form-range" min="90" max="130"
-			value="98" id="targetTemp" oninput="amount.value=targetTemp.value">
-			<output id="amount" name="amount" for="targetTemp">98</output>
+  <!-- Temp Info Card -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <i class="bi bi-thermometer-half"></i> Températures & PID
+    </div>
+    <div class="card-body">
+      <p><strong>Température actuelle :</strong> <span id="currentTemp">--</span></p>
+      <p><strong>Température cible :</strong> <span id="setTemp">--</span></p>
+      <p><strong>Commande P :</strong> <span id="commandP">--</span></p>
+      <p><strong>Commande I :</strong> <span id="commandI">--</span></p>
+      <p><strong>Commande D :</strong> <span id="commandD">--</span></p>
+      <p><strong>Temps de brassage restant :</strong> <span id="brewTime">--</span></p>
+    </div>
+  </div>
 
-			<label for="setTemp">Current temperature:</label>
-			<p id=setTemp>This is some text in a paragraph.</p>
+  <!-- Temp Chart -->
+  <div class="card mb-4">
+    <div class="card-header bg-warning text-dark">
+      <i class="bi bi-graph-up"></i> Température en temps réel
+    </div>
+    <div class="card-body">
+      <canvas id="tempChart" height="150"></canvas>
+    </div>
+  </div>
 
-			<label for="currentTemp">Current temperature:</label>
-			<p id=currentTemp>This is some text in a paragraph.</p>
+  <!-- Temperature Slider -->
+  <div class="card mb-4">
+    <div class="card-header bg-info text-white">
+      <i class="bi bi-sliders"></i> Réglage de la température cible
+    </div>
+    <div class="card-body">
+      <label for="targetTemp" class="form-label">Température :</label>
+      <div class="d-flex align-items-center">
+        <input type="range" class="form-range me-3" min="90" max="130" value="98"
+               id="targetTemp" oninput="rangeValue.value=targetTemp.value">
+        <output id="rangeValue">98</output> °C
+      </div>
+    </div>
+  </div>
 
-			<label for="commandP">Command P:</label>
-			<p id=commandP>This is some text in a paragraph.</p>
+  <!-- Command Buttons -->
+  <div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+      <i class="bi bi-cpu"></i> Commandes
+    </div>
+    <div class="card-body text-center">
+      <div class="btn-group mb-3" role="group">
+        <button id="brewButton" class="btn btn-success">
+          <i class="bi bi-cup-hot"></i> Brew 20 sec
+        </button>
+        <button id="purgeButton" class="btn btn-danger">
+          <i class="bi bi-x-circle"></i> Purge 1 sec
+        </button>
+      </div>
+      <br>
+      <div class="btn-group" role="group">
+        <button id="temp975Button" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-down"></i> Temp 97.5 °C
+        </button>
+        <button id="temp110Button" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-up"></i> Temp 110 °C
+        </button>
+      </div>
+    </div>
+  </div>
 
-			<label for="commandI">Command I:</label>
-			<p id=commandI>This is some text in a paragraph.</p>
+  <!-- JS Logic -->
+  <script type="text/javascript">
+    // Command buttons
+    $(function () {
+      $('#brewButton').click(function () { $.getJSON('/_brew'); return false; });
+      $('#purgeButton').click(function () { $.getJSON('/_purge'); return false; });
+      $('#temp975Button').click(function () { $.getJSON('/_setTemp975'); return false; });
+      $('#temp110Button').click(function () { $.getJSON('/_setTemp110'); return false; });
+    });
 
-			<label for="commandD">Command D:</label>
-			<p id=commandD>This is some text in a paragraph.</p>
+    // Chart init
+    let tempData = [];
+    let labels = [];
+    let maxPoints = 50;
 
-			<label for="brew?">Brew time:</label>
-			<p id=brewTime>This is some text in a paragraph.</p>
-		</form>
+    const ctx = document.getElementById('tempChart').getContext('2d');
+    const tempChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Température de l’eau (°C)',
+          data: tempData,
+          borderColor: '#0dcaf0',
+          backgroundColor: 'rgba(13, 202, 240, 0.1)',
+          tension: 0.3,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            suggestedMin: 80,
+            suggestedMax: 120,
+            title: { display: true, text: '°C' },
+            ticks: { color: '#fff' }
+          },
+          x: {
+            display: false
+          }
+        },
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: {
+            labels: { color: '#fff' }
+          }
+        }
+      }
+    });
 
-		<a href=# id=brewButton><button class='btn btn-default'>brew 20 sec</button></a>
-		<a href=# id=temp975Button><button class='btn btn-default'>temp 97.5</button></a>
-		<a href=# id=temp110Button><button class='btn btn-default'>temp 110</button></a>
-		<a href=# id=purgeButton><button class='btn btn-default'>purge 1 sec</button></a>
+    // Periodic status update
+    function updateStatus() {
+      $.getJSON('/_get_temp', function (data) {
+        const now = new Date().toLocaleTimeString();
+        const temp = data.temp;
 
+        // Update DOM
+        $("#currentTemp").text(data.temp + " °C");
+        $("#setTemp").text(data.setTemp + " °C");
+        $("#commandP").text(data.commandP);
+        $("#commandI").text(data.commandI);
+        $("#commandD").text(data.commandD);
+        $("#brewTime").text(data.brew + " sec");
 
-	</div>
+        // Update chart
+        if (temp !== undefined) {
+          tempData.push(temp);
+          labels.push(now);
 
+          if (tempData.length > maxPoints) {
+            tempData.shift();
+            labels.shift();
+          }
+
+          tempChart.update();
+        }
+      });
+    }
+
+    setInterval(updateStatus, 500);
+  </script>
 
 </body>
-
-
 </html>

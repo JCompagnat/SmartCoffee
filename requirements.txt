@@ -1,0 +1,6 @@
+flask
+simple-pid
+jsonpickle
+RPi.GPIO
+adafruit-circuitpython-max31865
+adafruit-blinka

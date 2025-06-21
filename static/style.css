@@ -1,47 +1,92 @@
-/* The sidenav */
-.sidenav2 {
-  height: 100%;
-  width: 200px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  padding-top: 20px;
+/* FONT & BODY */
+body {
+  background: linear-gradient(135deg, #1d1f27, #2a2f3b);
+  color: #f4f4f4;
+  font-family: 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif;
+  padding: 2rem;
 }
 
-/* Page content */
-.mainscreen {
-  margin-left: 200px; /* Same as the width of the sidenav */
+/* CARDS - Glass style */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1rem;
+  margin-bottom: 2rem;
 }
 
-/* The navigation menu links */
-.sidenav2 a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
+/* HEADERS */
+.card-header {
+  background: transparent;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #ffffffcc;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-/* When you mouse over the navigation links, change their color */
-.sidenav2 a:hover {
-  color: #f1f1f1;
+/* TEXT */
+p, label {
+  color: #ffffffcc;
 }
 
-/* Position and style the close button (top right corner) */
-.sidenav2 .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
+/* BUTTONS */
+.btn {
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidenav2 {padding-top: 15px;}
-  .sidenav2 a {font-size: 18px;}
+.btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.btn-primary {
+  background-color: #3d8bfd;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+
+.btn-outline-primary {
+  border: 1px solid #3d8bfd;
+  color: #3d8bfd;
+}
+
+.btn-outline-primary:hover {
+  background-color: #3d8bfd;
+  color: white;
+}
+
+/* SLIDER */
+input[type=range] {
+  accent-color: #0dcaf0;
+}
+
+/* SLIDER VALUE */
+output {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #ffffffcc;
+}
+
+/* PAGE HEADER */
+h1 {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: #ffffffee;
+  text-align: center;
+  margin-bottom: 2rem;
 }
