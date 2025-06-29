@@ -5,23 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Smart Coffee</title>
 
-  <!-- Favicon -->
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -31,7 +20,6 @@
 
   <h1 class="mb-4 text-center">☕ Contrôle Manuel – Smart Coffee</h1>
 
-  <!-- Temp Info Card -->
   <div class="card mb-4">
     <div class="card-header bg-primary text-white">
       <i class="bi bi-thermometer-half"></i> Températures & PID
@@ -46,17 +34,15 @@
     </div>
   </div>
 
-  <!-- Temp Chart -->
   <div class="card mb-4">
     <div class="card-header bg-warning text-dark">
-      <i class="bi bi-graph-up"></i> Température en temps réel
+      <i class="bi bi-graph-up"></i> Température & PWM en temps réel
     </div>
     <div class="card-body">
       <canvas id="tempChart" height="150"></canvas>
     </div>
   </div>
 
-  <!-- Temperature Slider -->
   <div class="card mb-4">
     <div class="card-header bg-info text-white">
       <i class="bi bi-sliders"></i> Réglage de la température cible
@@ -71,7 +57,6 @@
     </div>
   </div>
 
-  <!-- Command Buttons -->
   <div class="card mb-4">
     <div class="card-header bg-secondary text-white">
       <i class="bi bi-cpu"></i> Commandes
@@ -97,46 +82,65 @@
     </div>
   </div>
 
-  <!-- JS Logic -->
   <script type="text/javascript">
-    // Command buttons
     $(function () {
-      $('#brewButton').click(function () { $.getJSON('/_brew'); return false; });
-      $('#purgeButton').click(function () { $.getJSON('/_purge'); return false; });
-      $('#temp975Button').click(function () { $.getJSON('/_setTemp975'); return false; });
-      $('#temp110Button').click(function () { $.getJSON('/_setTemp110'); return false; });
+      $('#brewButton').click(() => $.getJSON('/_brew'));
+      $('#purgeButton').click(() => $.getJSON('/_purge'));
+      $('#temp975Button').click(() => $.getJSON('/_setTemp975'));
+      $('#temp110Button').click(() => $.getJSON('/_setTemp110'));
     });
 
-    // Chart init
     let tempData = [];
+    let pwmData = [];
     let labels = [];
-    let maxPoints = 50;
+    const maxPoints = 50;
 
     const ctx = document.getElementById('tempChart').getContext('2d');
     const tempChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: labels,
-        datasets: [{
-          label: 'Température de l’eau (°C)',
-          data: tempData,
-          borderColor: '#0dcaf0',
-          backgroundColor: 'rgba(13, 202, 240, 0.1)',
-          tension: 0.3,
-          pointRadius: 0
-        }]
+        datasets: [
+          {
+            label: 'Température de l’eau (°C)',
+            data: tempData,
+            borderColor: '#0dcaf0',
+            backgroundColor: 'rgba(13, 202, 240, 0.1)',
+            tension: 0.3,
+            pointRadius: 0,
+            yAxisID: 'y'
+          },
+          {
+            label: 'PWM (%)',
+            data: pwmData,
+            borderColor: '#ffc107',
+            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+            tension: 0.3,
+            pointRadius: 0,
+            yAxisID: 'y1'
+          }
+        ]
       },
       options: {
         scales: {
           y: {
+            type: 'linear',
+            position: 'left',
             suggestedMin: 80,
             suggestedMax: 120,
-            title: { display: true, text: '°C' },
-            ticks: { color: '#fff' }
+            title: { display: true, text: 'Température (°C)' },
+            ticks: { color: '#0dcaf0' }
           },
-          x: {
-            display: false
-          }
+          y1: {
+            type: 'linear',
+            position: 'right',
+            suggestedMin: 0,
+            suggestedMax: 100,
+            title: { display: true, text: 'PWM (%)' },
+            grid: { drawOnChartArea: false },
+            ticks: { color: '#ffc107' }
+          },
+          x: { display: false }
         },
         responsive: true,
         animation: false,
@@ -148,27 +152,27 @@
       }
     });
 
-    // Periodic status update
     function updateStatus() {
       $.getJSON('/_get_temp', function (data) {
         const now = new Date().toLocaleTimeString();
         const temp = data.temp;
+        const pwm = data.commandPWM;
 
-        // Update DOM
-        $("#currentTemp").text(data.temp + " °C");
+        $("#currentTemp").text(temp + " °C");
         $("#setTemp").text(data.setTemp + " °C");
         $("#commandP").text(data.commandP);
         $("#commandI").text(data.commandI);
         $("#commandD").text(data.commandD);
         $("#brewTime").text(data.brew + " sec");
 
-        // Update chart
-        if (temp !== undefined) {
+        if (temp !== undefined && pwm !== undefined) {
           tempData.push(temp);
+          pwmData.push(pwm);
           labels.push(now);
 
           if (tempData.length > maxPoints) {
             tempData.shift();
+            pwmData.shift();
             labels.shift();
           }
 
@@ -177,7 +181,7 @@
       });
     }
 
-    setInterval(updateStatus, 500);
+    setInterval(updateStatus, 1000);
   </script>
 
 </body>

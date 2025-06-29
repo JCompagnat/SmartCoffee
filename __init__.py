@@ -19,42 +19,41 @@ except (ImportError, RuntimeError):
     import mock_max31865 as max31865
 
 # =============================
-# Global Flask app declaration
+# Global app + shared data
 # =============================
 application = Flask(__name__)
 application.secret_key = 'BAD_SECRET_KEY'
-
-# Shared data store
-manager = multiprocessing.Manager()
-shardedData = manager.dict()
+manager = None
+shardedData = None
 
 # ====================
 # Shared data defaults
 # ====================
-def initialize_shared_data():
-    shardedData['pid_p'] = 0
-    shardedData['pid_i'] = 0
-    shardedData['pid_d'] = 0
-    shardedData['brewTime'] = 0
-    shardedData['waterTemp'] = 0
-    shardedData['setTemp'] = 97.5
+def initialize_shared_data(shared):
+    shared['pid_p'] = 0
+    shared['pid_i'] = 0
+    shared['pid_d'] = 0
+    shared['pid_control'] = 0
+    shared['brewTime'] = 0
+    shared['waterTemp'] = 0
+    shared['setTemp'] = 97.5
 
 # ===================
 # Background workers
 # ===================
-def pid():
+def pid(shared):
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(19, GPIO.OUT)
     pwm = GPIO.PWM(19, 60)
     pwm.start(0)
 
-    pid_controller = PID(20, 0, 250, setpoint=shardedData['setTemp'])
+    pid_controller = PID(2, 0.05, 1.0, setpoint=shared['setTemp'])
     pid_controller.output_limits = (0, 100)
     tempSensor = max31865.max31865()
 
     while True:
-        if pid_controller.setpoint != shardedData['setTemp']:
-            pid_controller.setpoint = shardedData['setTemp']
+        if pid_controller.setpoint != shared['setTemp']:
+            pid_controller.setpoint = shared['setTemp']
 
         try:
             waterTemp = tempSensor.readTemp()
@@ -66,23 +65,23 @@ def pid():
         pwm.ChangeDutyCycle(control)
 
         p, i, d = pid_controller.components
-        shardedData['pid_p'] = p
-        shardedData['pid_i'] = i
-        shardedData['pid_d'] = d
-        shardedData['pid_control'] = control
-        shardedData['waterTemp'] = waterTemp
+        shared['pid_p'] = p
+        shared['pid_i'] = i
+        shared['pid_d'] = d
+        shared['pid_control'] = control
+        shared['waterTemp'] = waterTemp
 
         time.sleep(1)
 
-def brew():
+def brew(shared):
     while True:
-        if shardedData['brewTime'] > 0:
+        if shared['brewTime'] > 0:
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(26, GPIO.OUT)
             GPIO.output(26, 1)
-            while shardedData['brewTime'] > 0:
+            while shared['brewTime'] > 0:
                 time.sleep(1)
-                shardedData['brewTime'] -= 1
+                shared['brewTime'] -= 1
             GPIO.output(26, 0)
         time.sleep(0.5)
 
@@ -101,6 +100,7 @@ def _get_temp():
         commandP=shardedData.get('pid_p', 0),
         commandI=shardedData.get('pid_i', 0),
         commandD=shardedData.get('pid_d', 0),
+        commandPWM=shardedData.get('pid_control', 0),
         brew=shardedData.get('brewTime', 0),
         setTemp=shardedData.get('setTemp', 97.5)
     )
@@ -125,12 +125,23 @@ def _setTemp975():
     shardedData['setTemp'] = 97.5
     return jsonify(temp=shardedData['setTemp'])
 
+# =========================
+# Setup function for Apache
+# =========================
+def setup_application():
+    global manager, shardedData
+    if manager is None:
+        manager = multiprocessing.Manager()
+        shardedData = manager.dict()
+        initialize_shared_data(shardedData)
+
 # ================
 # Manual Start
 # ================
 def start_workers():
-    w1 = multiprocessing.Process(target=pid)
-    w2 = multiprocessing.Process(target=brew)
+    global shardedData
+    w1 = multiprocessing.Process(target=pid, args=(shardedData,))
+    w2 = multiprocessing.Process(target=brew, args=(shardedData,))
     w1.start()
     w2.start()
 
@@ -139,13 +150,6 @@ def start_workers():
 # ================
 if __name__ == '__main__':
     multiprocessing.set_start_method("spawn")
-    initialize_shared_data()
+    setup_application()
     start_workers()
     application.run(debug=True)
-
-# ================
-# Apache mod_wsgi init
-# ================
-if 'mod_wsgi' in sys.modules:
-    initialize_shared_data()
-    start_workers()
