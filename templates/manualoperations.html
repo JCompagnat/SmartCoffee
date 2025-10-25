@@ -18,67 +18,134 @@
 
   {% include 'sidenavigation.html' %}
 
-  <h1 class="mb-4 text-center">☕ Contrôle Manuel – Smart Coffee</h1>
-
-  <div class="card mb-4">
-    <div class="card-header bg-primary text-white">
-      <i class="bi bi-thermometer-half"></i> Températures & PID
+  <section class="hero-panel card mb-4">
+    <div class="hero-copy">
+      <p class="hero-tag">Mode laboratoire • Raspberry Pi Touch</p>
+      <h1>Smart Coffee Lab</h1>
+      <p class="hero-text">
+        Tableau de bord tactile pour ajuster et comprendre chaque extraction. Pensé
+        pour l’ingénieur passionné qui mesure, expérimente et savoure.
+      </p>
     </div>
-    <div class="card-body">
-      <p><strong>Température actuelle :</strong> <span id="currentTemp">--</span></p>
-      <p><strong>Température cible :</strong> <span id="setTemp">--</span></p>
-      <p><strong>Commande P :</strong> <span id="commandP">--</span></p>
-      <p><strong>Commande I :</strong> <span id="commandI">--</span></p>
-      <p><strong>Commande D :</strong> <span id="commandD">--</span></p>
-      <p><strong>Temps de brassage restant :</strong> <span id="brewTime">--</span></p>
-    </div>
-  </div>
-
-  <div class="card mb-4">
-    <div class="card-header bg-warning text-dark">
-      <i class="bi bi-graph-up"></i> Température & PWM en temps réel
-    </div>
-    <div class="card-body">
-      <canvas id="tempChart" height="150"></canvas>
-    </div>
-  </div>
-
-  <div class="card mb-4">
-    <div class="card-header bg-info text-white">
-      <i class="bi bi-sliders"></i> Réglage de la température cible
-    </div>
-    <div class="card-body">
-      <label for="targetTemp" class="form-label">Température :</label>
-      <div class="d-flex align-items-center">
-        <input type="range" class="form-range me-3" min="90" max="130" value="98"
-               id="targetTemp" oninput="rangeValue.value=targetTemp.value">
-        <output id="rangeValue">98</output> °C
+    <div class="hero-meta">
+      <div class="hero-chip">
+        <i class="bi bi-activity"></i>
+        <span>Flux manuel actif</span>
+      </div>
+      <div class="hero-chip">
+        <i class="bi bi-cpu"></i>
+        <span>PID en service</span>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="card mb-4">
-    <div class="card-header bg-secondary text-white">
-      <i class="bi bi-cpu"></i> Commandes
+  <section class="status-panel card mb-4">
+    <div class="status-grid">
+      <div class="status-card">
+        <p class="status-label">Température actuelle</p>
+        <p class="status-value" id="currentTemp">--</p>
+      </div>
+      <div class="status-card">
+        <p class="status-label">Température cible</p>
+        <p class="status-value" id="setTemp">--</p>
+      </div>
+      <div class="status-card">
+        <p class="status-label">Commande P</p>
+        <p class="status-value small" id="commandP">--</p>
+      </div>
+      <div class="status-card">
+        <p class="status-label">Commande I</p>
+        <p class="status-value small" id="commandI">--</p>
+      </div>
+      <div class="status-card">
+        <p class="status-label">Commande D</p>
+        <p class="status-value small" id="commandD">--</p>
+      </div>
+      <div class="status-card">
+        <p class="status-label">Temps de brassage restant</p>
+        <p class="status-value" id="brewTime">--</p>
+      </div>
     </div>
-    <div class="card-body text-center">
-      <div class="btn-group mb-3" role="group">
-        <button id="brewButton" class="btn btn-success">
-          <i class="bi bi-cup-hot"></i> Brew 20 sec
-        </button>
-        <button id="purgeButton" class="btn btn-danger">
-          <i class="bi bi-x-circle"></i> Purge 1 sec
-        </button>
+  </section>
+
+  <section class="card mb-4 chart-panel">
+    <div class="panel-heading">
+      <div>
+        <p class="panel-eyebrow">Analyse en direct</p>
+        <h2>Température & PWM</h2>
       </div>
-      <br>
-      <div class="btn-group" role="group">
-        <button id="temp975Button" class="btn btn-outline-primary">
-          <i class="bi bi-arrow-down"></i> Temp 97.5 °C
-        </button>
-        <button id="temp110Button" class="btn btn-outline-primary">
-          <i class="bi bi-arrow-up"></i> Temp 110 °C
-        </button>
-      </div>
+      <span class="panel-chip">
+        <i class="bi bi-circle-fill text-success me-2"></i>
+        rafraîchie chaque seconde
+      </span>
+    </div>
+    <div class="card-body p-0">
+      <canvas id="tempChart" height="180"></canvas>
+    </div>
+  </section>
+
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-xl-6">
+      <section class="card h-100">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-eyebrow">Réglage fin</p>
+            <h2>Cible thermique</h2>
+          </div>
+          <span class="panel-chip">
+            <i class="bi bi-thermometer-half me-2"></i>
+            curseur tactile
+          </span>
+        </div>
+        <div class="card-body">
+          <label for="targetTemp" class="form-label">Température (90 – 130 °C)</label>
+          <div class="slider-row">
+            <span class="slider-end">90</span>
+            <input type="range" class="form-range" min="90" max="130" value="98"
+                   id="targetTemp" oninput="rangeValue.value=targetTemp.value">
+            <span class="slider-end">130</span>
+          </div>
+          <div class="slider-value">
+            <span id="rangeValue">98</span> °C
+          </div>
+          <p class="slider-helper">
+            Ajustez la consigne avant de lancer une extraction. À intégrer avec un endpoint
+            dédié si vous souhaitez pousser automatiquement la valeur côté PID.
+          </p>
+        </div>
+      </section>
+    </div>
+    <div class="col-12 col-xl-6">
+      <section class="card h-100">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-eyebrow">Actions rapides</p>
+            <h2>Commandes de brassage</h2>
+          </div>
+          <span class="panel-chip">
+            <i class="bi bi-touch me-2"></i>
+            100% tactile
+          </span>
+        </div>
+        <div class="card-body text-center">
+          <div class="touch-grid mb-3">
+            <button id="brewButton" class="btn btn-lg btn-success touch-btn">
+              <i class="bi bi-cup-hot me-2"></i> Brew 20 sec
+            </button>
+            <button id="purgeButton" class="btn btn-lg btn-danger touch-btn">
+              <i class="bi bi-x-circle me-2"></i> Purge 1 sec
+            </button>
+          </div>
+          <div class="touch-grid">
+            <button id="temp975Button" class="btn btn-lg btn-outline-primary touch-btn">
+              <i class="bi bi-arrow-down-circle me-2"></i> Temp 97.5 °C
+            </button>
+            <button id="temp110Button" class="btn btn-lg btn-outline-primary touch-btn">
+              <i class="bi bi-arrow-up-circle me-2"></i> Temp 110 °C
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 
