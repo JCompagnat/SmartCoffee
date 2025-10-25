@@ -104,6 +104,16 @@ def ensure_shared_data():
 def _get_temp():
     ensure_shared_data()
     temp = shardedData.get('waterTemp', round(random.uniform(85.0, 105.0), 1))
+    application.logger.debug(
+        'Température envoyée temp=%s set=%s brew=%s p=%s i=%s d=%s pwm=%s',
+        temp,
+        shardedData.get('setTemp', 97.5),
+        shardedData.get('brewTime', 0),
+        shardedData.get('pid_p', 0),
+        shardedData.get('pid_i', 0),
+        shardedData.get('pid_d', 0),
+        shardedData.get('pid_control', 0),
+    )
     return jsonify(
         temp=temp,
         commandP=shardedData.get('pid_p', 0),

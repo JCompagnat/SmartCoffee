@@ -83,105 +83,141 @@
   </div>
 
   <script type="text/javascript">
-    $(function () {
-      $('#brewButton').click(() => $.getJSON('/_brew'));
-      $('#purgeButton').click(() => $.getJSON('/_purge'));
-      $('#temp975Button').click(() => $.getJSON('/_setTemp975'));
-      $('#temp110Button').click(() => $.getJSON('/_setTemp110'));
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+      const fetchJson = (url) =>
+        fetch(url, { cache: 'no-cache' })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('HTTP ' + response.status + ' on ' + url);
+            }
+            return response.json();
+          })
+          .catch((error) => {
+            console.error('Commande AJAX échouée :', error);
+            return null;
+          });
 
-    let tempData = [];
-    let pwmData = [];
-    let labels = [];
-    const maxPoints = 50;
-
-    const ctx = document.getElementById('tempChart').getContext('2d');
-    const tempChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Température de l’eau (°C)',
-            data: tempData,
-            borderColor: '#0dcaf0',
-            backgroundColor: 'rgba(13, 202, 240, 0.1)',
-            tension: 0.3,
-            pointRadius: 0,
-            yAxisID: 'y'
-          },
-          {
-            label: 'PWM (%)',
-            data: pwmData,
-            borderColor: '#ffc107',
-            backgroundColor: 'rgba(255, 193, 7, 0.1)',
-            tension: 0.3,
-            pointRadius: 0,
-            yAxisID: 'y1'
-          }
-        ]
-      },
-      options: {
-        scales: {
-          y: {
-            type: 'linear',
-            position: 'left',
-            suggestedMin: 80,
-            suggestedMax: 120,
-            title: { display: true, text: 'Température (°C)' },
-            ticks: { color: '#0dcaf0' }
-          },
-          y1: {
-            type: 'linear',
-            position: 'right',
-            suggestedMin: 0,
-            suggestedMax: 100,
-            title: { display: true, text: 'PWM (%)' },
-            grid: { drawOnChartArea: false },
-            ticks: { color: '#ffc107' }
-          },
-          x: { display: false }
-        },
-        responsive: true,
-        animation: false,
-        plugins: {
-          legend: {
-            labels: { color: '#fff' }
-          }
+      const bindCommand = (buttonId, endpoint) => {
+        const button = document.getElementById(buttonId);
+        if (!button) {
+          return;
         }
+        button.addEventListener('click', () => fetchJson(endpoint));
+      };
+
+      bindCommand('brewButton', '/_brew');
+      bindCommand('purgeButton', '/_purge');
+      bindCommand('temp975Button', '/_setTemp975');
+      bindCommand('temp110Button', '/_setTemp110');
+
+      const tempData = [];
+      const pwmData = [];
+      const labels = [];
+      const maxPoints = 50;
+
+      let tempChart = null;
+      const tempCanvas = document.getElementById('tempChart');
+      if (window.Chart && tempCanvas) {
+        tempChart = new Chart(tempCanvas.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Température de l’eau (°C)',
+                data: tempData,
+                borderColor: '#0dcaf0',
+                backgroundColor: 'rgba(13, 202, 240, 0.1)',
+                tension: 0.3,
+                pointRadius: 0,
+                yAxisID: 'y'
+              },
+              {
+                label: 'PWM (%)',
+                data: pwmData,
+                borderColor: '#ffc107',
+                backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                tension: 0.3,
+                pointRadius: 0,
+                yAxisID: 'y1'
+              }
+            ]
+          },
+          options: {
+            scales: {
+              y: {
+                type: 'linear',
+                position: 'left',
+                suggestedMin: 80,
+                suggestedMax: 120,
+                title: { display: true, text: 'Température (°C)' },
+                ticks: { color: '#0dcaf0' }
+              },
+              y1: {
+                type: 'linear',
+                position: 'right',
+                suggestedMin: 0,
+                suggestedMax: 100,
+                title: { display: true, text: 'PWM (%)' },
+                grid: { drawOnChartArea: false },
+                ticks: { color: '#ffc107' }
+              },
+              x: { display: false }
+            },
+            responsive: true,
+            animation: false,
+            plugins: {
+              legend: {
+                labels: { color: '#fff' }
+              }
+            }
+          }
+        });
       }
-    });
 
-    function updateStatus() {
-      $.getJSON('/_get_temp', function (data) {
-        const now = new Date().toLocaleTimeString();
-        const temp = data.temp;
-        const pwm = data.commandPWM;
-
-        $("#currentTemp").text(temp + " °C");
-        $("#setTemp").text(data.setTemp + " °C");
-        $("#commandP").text(data.commandP);
-        $("#commandI").text(data.commandI);
-        $("#commandD").text(data.commandD);
-        $("#brewTime").text(data.brew + " sec");
-
-        if (temp !== undefined && pwm !== undefined) {
-          tempData.push(temp);
-          pwmData.push(pwm);
-          labels.push(now);
-
-          if (tempData.length > maxPoints) {
-            tempData.shift();
-            pwmData.shift();
-            labels.shift();
+      function updateStatus() {
+        fetchJson('/_get_temp').then((data) => {
+          if (!data) {
+            return;
           }
 
-          tempChart.update();
-        }
-      });
-    }
+          const now = new Date().toLocaleTimeString();
+          const temp = data.temp;
+          const pwm = data.commandPWM;
 
-    setInterval(updateStatus, 1000);
+          const setText = (id, text) => {
+            const el = document.getElementById(id);
+            if (el) {
+              el.textContent = text;
+            }
+          };
+
+          setText('currentTemp', temp + ' °C');
+          setText('setTemp', data.setTemp + ' °C');
+          setText('commandP', data.commandP);
+          setText('commandI', data.commandI);
+          setText('commandD', data.commandD);
+          setText('brewTime', data.brew + ' sec');
+
+          if (tempChart && temp !== undefined && pwm !== undefined) {
+            tempData.push(temp);
+            pwmData.push(pwm);
+            labels.push(now);
+
+            if (tempData.length > maxPoints) {
+              tempData.shift();
+              pwmData.shift();
+              labels.shift();
+            }
+
+            tempChart.update();
+          }
+        });
+      }
+
+      updateStatus();
+      setInterval(updateStatus, 1000);
+    });
   </script>
 
 </body>
