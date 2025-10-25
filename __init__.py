@@ -164,9 +164,16 @@ def start_workers():
     if worker_processes:
         return
 
-    context = multiprocessing.get_context('spawn')
-    w1 = context.Process(target=pid, args=(shardedData,))
-    w2 = context.Process(target=brew, args=(shardedData,))
+    context = None
+    if hasattr(multiprocessing, 'get_context'):
+        try:
+            context = multiprocessing.get_context('spawn')
+        except (ValueError, AttributeError):
+            context = None
+
+    ProcessClass = context.Process if context else multiprocessing.Process
+    w1 = ProcessClass(target=pid, args=(shardedData,))
+    w2 = ProcessClass(target=brew, args=(shardedData,))
     w1.daemon = True
     w2.daemon = True
     w1.start()
@@ -182,7 +189,11 @@ def _bootstrap_workers():
 # App runner
 # ================
 if __name__ == '__main__':
-    multiprocessing.set_start_method("spawn")
+    if hasattr(multiprocessing, 'set_start_method'):
+        try:
+            multiprocessing.set_start_method("spawn")
+        except RuntimeError:
+            pass
     setup_application()
     start_workers()
     application.run(debug=True)
