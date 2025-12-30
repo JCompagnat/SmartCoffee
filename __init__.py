@@ -28,6 +28,16 @@ shardedData = None
 worker_processes = []
 
 # ====================
+# PID tuning defaults
+# ====================
+PID_KP = 1.4
+PID_KI = 0.0
+PID_KD = 2.0
+PID_SAMPLE_TIME = 1.0
+PID_OUTPUT_LIMITS = (0, 100)
+PID_SETPOINT_RAMP = 0.6
+
+# ====================
 # Shared data defaults
 # ====================
 def initialize_shared_data(shared):
@@ -48,13 +58,25 @@ def pid(shared):
     pwm = GPIO.PWM(19, 60)
     pwm.start(0)
 
-    pid_controller = PID(2, 0.05, 1.0, setpoint=shared['setTemp'])
-    pid_controller.output_limits = (0, 100)
+    pid_controller = PID(
+        PID_KP,
+        PID_KI,
+        PID_KD,
+        setpoint=shared['setTemp'],
+        sample_time=PID_SAMPLE_TIME,
+        proportional_on_measurement=True,
+    )
+    pid_controller.output_limits = PID_OUTPUT_LIMITS
     tempSensor = max31865.max31865()
+    ramped_setpoint = shared['setTemp']
 
     while True:
-        if pid_controller.setpoint != shared['setTemp']:
-            pid_controller.setpoint = shared['setTemp']
+        target_setpoint = shared['setTemp']
+        if ramped_setpoint != target_setpoint:
+            delta = target_setpoint - ramped_setpoint
+            step = PID_SETPOINT_RAMP if abs(delta) > PID_SETPOINT_RAMP else abs(delta)
+            ramped_setpoint += step if delta > 0 else -step
+            pid_controller.setpoint = ramped_setpoint
 
         try:
             waterTemp = tempSensor.readTemp()
