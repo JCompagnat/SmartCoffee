@@ -190,6 +190,27 @@ output {
   background: rgba(255, 255, 255, 0.08);
 }
 
+.smart-tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem 0.5rem;
+}
+
+.smart-tabs .nav-link {
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.45rem 0.9rem;
+}
+
+.smart-tabs .nav-link.active {
+  background: rgba(13, 202, 240, 0.2);
+  color: #fff;
+}
+
+.smart-tab-content {
+  padding: 0.5rem;
+}
+
 .chart-panel canvas {
   width: 100%;
 }
