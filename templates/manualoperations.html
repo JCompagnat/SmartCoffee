@@ -35,6 +35,12 @@
         </button>
       </li>
       <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-advanced" data-bs-toggle="pill"
+                data-bs-target="#panel-advanced" type="button" role="tab">
+          <i class="bi bi-sliders me-2"></i>Options avancées
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
         <button class="nav-link" id="tab-chart" data-bs-toggle="pill"
                 data-bs-target="#panel-chart" type="button" role="tab">
           <i class="bi bi-graph-up me-2"></i>Suivi
@@ -43,66 +49,62 @@
     </ul>
     <div class="tab-content smart-tab-content">
       <div class="tab-pane fade show active" id="panel-commands" role="tabpanel">
-        <div class="row g-3">
-          <div class="col-12 col-lg-6">
-            <section class="card h-100">
-              <div class="panel-heading">
-                <div>
-                  <p class="panel-eyebrow">Réglage fin</p>
-                  <h2>Cible thermique</h2>
-                </div>
-                <span class="panel-chip">
-                  <i class="bi bi-thermometer-half me-2"></i>
-                  curseur tactile
-                </span>
-              </div>
-              <div class="card-body">
-                <label for="targetTemp" class="form-label">Température (90 – 130 °C)</label>
-                <div class="slider-row">
-                  <span class="slider-end">90</span>
-                  <input type="range" class="form-range" min="90" max="130" value="98"
-                         id="targetTemp" oninput="rangeValue.value=targetTemp.value">
-                  <span class="slider-end">130</span>
-                </div>
-                <div class="slider-value">
-                  <span id="rangeValue">98</span> °C
-                </div>
-              </div>
-            </section>
+        <section class="card">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-eyebrow">Actions rapides</p>
+              <h2>Commandes de brassage</h2>
+            </div>
+            <span class="panel-chip">
+              <i class="bi bi-touch me-2"></i>
+              100% tactile
+            </span>
           </div>
-          <div class="col-12 col-lg-6">
-            <section class="card h-100">
-              <div class="panel-heading">
-                <div>
-                  <p class="panel-eyebrow">Actions rapides</p>
-                  <h2>Commandes de brassage</h2>
-                </div>
-                <span class="panel-chip">
-                  <i class="bi bi-touch me-2"></i>
-                  100% tactile
-                </span>
-              </div>
-              <div class="card-body text-center">
-                <div class="touch-grid mb-3">
-                  <button id="brewButton" class="btn btn-lg btn-success touch-btn">
-                    <i class="bi bi-cup-hot me-2"></i> Brew 20 sec
-                  </button>
-                  <button id="purgeButton" class="btn btn-lg btn-danger touch-btn">
-                    <i class="bi bi-x-circle me-2"></i> Purge 1 sec
-                  </button>
-                </div>
-                <div class="touch-grid">
-                  <button id="temp975Button" class="btn btn-lg btn-outline-primary touch-btn">
-                    <i class="bi bi-arrow-down-circle me-2"></i> Temp 97.5 °C
-                  </button>
-                  <button id="temp110Button" class="btn btn-lg btn-outline-primary touch-btn">
-                    <i class="bi bi-arrow-up-circle me-2"></i> Temp 110 °C
-                  </button>
-                </div>
-              </div>
-            </section>
+          <div class="card-body text-center">
+            <div class="touch-grid mb-3">
+              <button id="brewButton" class="btn btn-lg btn-success touch-btn">
+                <i class="bi bi-cup-hot me-2"></i> Brew 20 sec
+              </button>
+              <button id="purgeButton" class="btn btn-lg btn-danger touch-btn">
+                <i class="bi bi-x-circle me-2"></i> Purge 1 sec
+              </button>
+            </div>
+            <div class="touch-grid">
+              <button id="temp975Button" class="btn btn-lg btn-outline-primary touch-btn">
+                <i class="bi bi-arrow-down-circle me-2"></i> Temp 97.5 °C
+              </button>
+              <button id="temp110Button" class="btn btn-lg btn-outline-primary touch-btn">
+                <i class="bi bi-arrow-up-circle me-2"></i> Temp 110 °C
+              </button>
+            </div>
           </div>
-        </div>
+        </section>
+      </div>
+      <div class="tab-pane fade" id="panel-advanced" role="tabpanel">
+        <section class="card">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-eyebrow">Réglages</p>
+              <h2>Cible thermique</h2>
+            </div>
+            <span class="panel-chip">
+              <i class="bi bi-thermometer-half me-2"></i>
+              curseur tactile
+            </span>
+          </div>
+          <div class="card-body">
+            <label for="targetTemp" class="form-label">Température (90 – 130 °C)</label>
+            <div class="slider-row">
+              <span class="slider-end">90</span>
+              <input type="range" class="form-range" min="90" max="130" value="98"
+                     id="targetTemp" oninput="rangeValue.value=targetTemp.value">
+              <span class="slider-end">130</span>
+            </div>
+            <div class="slider-value">
+              <span id="rangeValue">98</span> °C
+            </div>
+          </div>
+        </section>
       </div>
       <div class="tab-pane fade" id="panel-chart" role="tabpanel">
         <div class="row g-3">
