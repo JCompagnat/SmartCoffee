@@ -101,14 +101,6 @@ output {
   margin: 0;
 }
 
-.page-eyebrow {
-  font-size: 0.85rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0 0 0.35rem;
-}
-
 .page-chips {
   display: flex;
   flex-wrap: wrap;
@@ -209,6 +201,10 @@ output {
 
 .smart-tab-content {
   padding: 0.5rem;
+}
+
+.status-panel .status-grid {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 }
 
 .chart-panel canvas {

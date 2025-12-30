@@ -16,11 +16,8 @@
 
 <body class="container-fluid py-4">
 
-  {% include 'sidenavigation.html' %}
-
   <header class="page-header card mb-3">
     <div>
-      <p class="page-eyebrow">Mode laboratoire • Raspberry Pi Touch</p>
       <h1>Smart Coffee Lab</h1>
     </div>
     <div class="page-chips">
@@ -38,15 +35,9 @@
         </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tab-status" data-bs-toggle="pill"
-                data-bs-target="#panel-status" type="button" role="tab">
-          <i class="bi bi-speedometer2 me-2"></i>Statut
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
         <button class="nav-link" id="tab-chart" data-bs-toggle="pill"
                 data-bs-target="#panel-chart" type="button" role="tab">
-          <i class="bi bi-graph-up me-2"></i>Graphique
+          <i class="bi bi-graph-up me-2"></i>Suivi
         </button>
       </li>
     </ul>
@@ -113,52 +104,56 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane fade" id="panel-status" role="tabpanel">
-        <section class="status-panel card">
-          <div class="status-grid">
-            <div class="status-card">
-              <p class="status-label">Température actuelle</p>
-              <p class="status-value" id="currentTemp">--</p>
-            </div>
-            <div class="status-card">
-              <p class="status-label">Température cible</p>
-              <p class="status-value" id="setTemp">--</p>
-            </div>
-            <div class="status-card">
-              <p class="status-label">Commande P</p>
-              <p class="status-value small" id="commandP">--</p>
-            </div>
-            <div class="status-card">
-              <p class="status-label">Commande I</p>
-              <p class="status-value small" id="commandI">--</p>
-            </div>
-            <div class="status-card">
-              <p class="status-label">Commande D</p>
-              <p class="status-value small" id="commandD">--</p>
-            </div>
-            <div class="status-card">
-              <p class="status-label">Brassage restant</p>
-              <p class="status-value" id="brewTime">--</p>
-            </div>
-          </div>
-        </section>
-      </div>
       <div class="tab-pane fade" id="panel-chart" role="tabpanel">
-        <section class="card chart-panel">
-          <div class="panel-heading">
-            <div>
-              <p class="panel-eyebrow">Analyse en direct</p>
-              <h2>Température & PWM</h2>
-            </div>
-            <span class="panel-chip">
-              <i class="bi bi-circle-fill text-success me-2"></i>
-              rafraîchie chaque seconde
-            </span>
+        <div class="row g-3">
+          <div class="col-12 col-lg-6">
+            <section class="status-panel card h-100">
+              <div class="status-grid">
+                <div class="status-card">
+                  <p class="status-label">Température actuelle</p>
+                  <p class="status-value" id="currentTemp">--</p>
+                </div>
+                <div class="status-card">
+                  <p class="status-label">Température cible</p>
+                  <p class="status-value" id="setTemp">--</p>
+                </div>
+                <div class="status-card">
+                  <p class="status-label">Commande P</p>
+                  <p class="status-value small" id="commandP">--</p>
+                </div>
+                <div class="status-card">
+                  <p class="status-label">Commande I</p>
+                  <p class="status-value small" id="commandI">--</p>
+                </div>
+                <div class="status-card">
+                  <p class="status-label">Commande D</p>
+                  <p class="status-value small" id="commandD">--</p>
+                </div>
+                <div class="status-card">
+                  <p class="status-label">Brassage restant</p>
+                  <p class="status-value" id="brewTime">--</p>
+                </div>
+              </div>
+            </section>
           </div>
-          <div class="card-body p-0">
-            <canvas id="tempChart" height="130"></canvas>
+          <div class="col-12 col-lg-6">
+            <section class="card chart-panel h-100">
+              <div class="panel-heading">
+                <div>
+                  <p class="panel-eyebrow">Analyse en direct</p>
+                  <h2>Température & PWM</h2>
+                </div>
+                <span class="panel-chip">
+                  <i class="bi bi-circle-fill text-success me-2"></i>
+                  rafraîchie chaque seconde
+                </span>
+              </div>
+              <div class="card-body p-0">
+                <canvas id="tempChart" height="110"></canvas>
+              </div>
+            </section>
           </div>
-        </section>
+        </div>
       </div>
     </div>
   </section>
