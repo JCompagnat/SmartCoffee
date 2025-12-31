@@ -116,11 +116,13 @@ def brew(shared):
 def index():
     return render_template('manualoperations.html')
 
-def ensure_shared_data():
+def ensure_shared_data(start_workers_if_needed=True):
     """Make sure the shared manager/dict are initialized."""
     global shardedData
     if shardedData is None:
         setup_application()
+    if start_workers_if_needed:
+        start_workers(ensure=False)
 
 
 @application.route('/_get_temp')
@@ -187,9 +189,10 @@ def setup_application():
 # ================
 # Manual Start
 # ================
-def start_workers():
+def start_workers(ensure=True):
     global worker_processes
-    ensure_shared_data()
+    if ensure:
+        ensure_shared_data(start_workers_if_needed=False)
 
     # Avoid spawning multiple copies when the dev server reloads
     alive_workers = [proc for proc in worker_processes if proc.is_alive()]
