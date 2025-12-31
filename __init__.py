@@ -26,6 +26,7 @@ application.secret_key = 'BAD_SECRET_KEY'
 manager = None
 shardedData = None
 worker_processes = []
+workers_bootstrapped = False
 
 # ====================
 # PID tuning defaults
@@ -213,9 +214,12 @@ def start_workers():
     worker_processes.extend([w1, w2])
 
 
-@application.before_first_request
+@application.before_request
 def _bootstrap_workers():
-    start_workers()
+    global workers_bootstrapped
+    if not workers_bootstrapped:
+        start_workers()
+        workers_bootstrapped = True
 
 # ================
 # App runner
