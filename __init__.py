@@ -26,6 +26,17 @@ application.secret_key = 'BAD_SECRET_KEY'
 manager = None
 shardedData = None
 worker_processes = []
+workers_bootstrapped = False
+
+# ====================
+# PID tuning defaults
+# ====================
+PID_KP = 1.4
+PID_KI = 0.0
+PID_KD = 2.0
+PID_SAMPLE_TIME = 1.0
+PID_OUTPUT_LIMITS = (0, 100)
+PID_SETPOINT_RAMP = 0.6
 
 # ====================
 # Shared data defaults
@@ -48,13 +59,25 @@ def pid(shared):
     pwm = GPIO.PWM(19, 60)
     pwm.start(0)
 
-    pid_controller = PID(2, 0.05, 1.0, setpoint=shared['setTemp'])
-    pid_controller.output_limits = (0, 100)
+    pid_controller = PID(
+        PID_KP,
+        PID_KI,
+        PID_KD,
+        setpoint=shared['setTemp'],
+        sample_time=PID_SAMPLE_TIME,
+        proportional_on_measurement=True,
+    )
+    pid_controller.output_limits = PID_OUTPUT_LIMITS
     tempSensor = max31865.max31865()
+    ramped_setpoint = shared['setTemp']
 
     while True:
-        if pid_controller.setpoint != shared['setTemp']:
-            pid_controller.setpoint = shared['setTemp']
+        target_setpoint = shared['setTemp']
+        if ramped_setpoint != target_setpoint:
+            delta = target_setpoint - ramped_setpoint
+            step = PID_SETPOINT_RAMP if abs(delta) > PID_SETPOINT_RAMP else abs(delta)
+            ramped_setpoint += step if delta > 0 else -step
+            pid_controller.setpoint = ramped_setpoint
 
         try:
             waterTemp = tempSensor.readTemp()
@@ -93,11 +116,13 @@ def brew(shared):
 def index():
     return render_template('manualoperations.html')
 
-def ensure_shared_data():
+def ensure_shared_data(start_workers_if_needed=True):
     """Make sure the shared manager/dict are initialized."""
     global shardedData
     if shardedData is None:
         setup_application()
+    if start_workers_if_needed:
+        start_workers(ensure=False)
 
 
 @application.route('/_get_temp')
@@ -164,9 +189,10 @@ def setup_application():
 # ================
 # Manual Start
 # ================
-def start_workers():
+def start_workers(ensure=True):
     global worker_processes
-    ensure_shared_data()
+    if ensure:
+        ensure_shared_data(start_workers_if_needed=False)
 
     # Avoid spawning multiple copies when the dev server reloads
     alive_workers = [proc for proc in worker_processes if proc.is_alive()]
@@ -191,9 +217,12 @@ def start_workers():
     worker_processes.extend([w1, w2])
 
 
-@application.before_first_request
+@application.before_request
 def _bootstrap_workers():
-    start_workers()
+    global workers_bootstrapped
+    if not workers_bootstrapped:
+        start_workers()
+        workers_bootstrapped = True
 
 # ================
 # App runner
