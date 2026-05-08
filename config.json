@@ -1,1 +1,30 @@
-{"heater": 0}
+{
+  "pid": {
+    "kp": 2.0,
+    "ki": 0.05,
+    "kd": 1.0,
+    "setpoint": 100.0,
+    "sample_time": 1.0
+  },
+  "brew": {
+    "brew_duration": 25,
+    "purge_duration": 3,
+    "pre_infusion_enabled": false,
+    "pre_infusion_time": 4
+  },
+  "safety": {
+    "max_temp": 115.0,
+    "emergency_shutoff": true
+  },
+  "sensor": {
+    "cs_pin": 4,
+    "miso_pin": 9,
+    "mosi_pin": 10,
+    "clk_pin": 11
+  },
+  "hardware": {
+    "heater_pin": 19,
+    "relay_pin": 26,
+    "pwm_frequency": 1
+  }
+}

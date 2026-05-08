@@ -1,12 +1,42 @@
+"""Mock RPi.GPIO module for development without hardware."""
+
+BCM = "BCM"
+OUT = "OUT"
+IN = "IN"
+HIGH = 1
+LOW = 0
+
+
 class PWM:
     def __init__(self, pin, freq):
-        print(f"Mock PWM started on pin {pin} at freq {freq}")
-    def start(self, val): print(f"PWM start with value {val}")
-    def ChangeDutyCycle(self, val): print(f"PWM duty cycle changed to {val}")
-    def stop(self): print("PWM stopped")
+        self._pin = pin
+        self._dc = 0.0
 
-def setmode(mode): print(f"GPIO mode set: {mode}")
-def setup(pin, mode): print(f"GPIO setup on pin {pin} as {mode}")
-def output(pin, value): print(f"GPIO output on pin {pin}: {value}")
-def BCM(): return 'BCM'
-def OUT(): return 'OUT'
+    def start(self, dc):
+        self._dc = dc
+
+    def ChangeDutyCycle(self, dc):
+        self._dc = dc
+
+    def stop(self):
+        self._dc = 0.0
+
+
+def setmode(mode):
+    pass
+
+
+def setwarnings(flag):
+    pass
+
+
+def setup(pin, mode):
+    pass
+
+
+def output(pin, value):
+    pass
+
+
+def input(pin):
+    return 0
