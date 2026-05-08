@@ -1,156 +1,310 @@
 <!DOCTYPE html>
-<html>
-	<head>
-	  <!-- Required meta tags -->
-		<meta charset="utf-8">
-		<meta name="apple-mobile-web-app-capable">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-		<meta name = "viewport" content = "user-scalable=no, width=device-width">
-		<!-- Bootstrap CSS & custom CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-		<link rel="stylesheet" type= "text/css" href="{{ url_for("static", filename="style.css") }}">
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script type=text/javascript>
-		</script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>SmartCoffee</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
 
-		<title>Smart Coffee </title>
-	</head>
+<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<header class="app-header">
+  <div class="header-brand">
+    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+      <line x1="6" y1="1" x2="6" y2="4"/>
+      <line x1="10" y1="1" x2="10" y2="4"/>
+      <line x1="14" y1="1" x2="14" y2="4"/>
+    </svg>
+    <span class="brand-name">SmartCoffee</span>
+  </div>
 
-		<body>
+  <div class="header-phase">
+    <span class="phase-dot" id="phase-dot"></span>
+    <span id="phase-label">Initialising…</span>
+  </div>
 
-			{% include 'sidenavigation.html' %}
+  <div class="header-meta">
+    <span id="uptime-display" class="mono">00:00:00</span>
+    <span class="conn-dot" id="conn-dot" title="WebSocket"></span>
+  </div>
+</header>
 
-			<div id="main">
+<!-- ── Main layout ─────────────────────────────────────────────────────────── -->
+<main class="app-main">
 
+  <!-- ─── Left panel: gauge + chart ──────────────────────────────────────── -->
+  <section class="panel-left">
 
-				<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-				  <div class="carousel-inner">
-				    <div class="carousel-item active" data-bs-interval="false" data-bs-touch="true">
+    <!-- Temperature gauge -->
+    <div class="gauge-wrap">
+      <svg id="gauge-svg" class="gauge-svg" viewBox="0 0 300 270">
+        <!-- background track injected by JS -->
+        <path id="gauge-track" fill="none" stroke-linecap="round"/>
+        <!-- coloured fill arc -->
+        <path id="gauge-fill"  fill="none" stroke-linecap="round"/>
+        <!-- target setpoint tick -->
+        <line id="gauge-target-tick" stroke-linecap="round"/>
+        <!-- tick marks at 0 / 25 / 50 / 75 / 100 % -->
+        <g id="gauge-ticks" class="gauge-ticks"></g>
+        <!-- readings -->
+        <text id="g-temp"   class="g-temp"   x="150" y="152" text-anchor="middle">--.-</text>
+        <text                class="g-unit"              x="150" y="174" text-anchor="middle">°C</text>
+        <text id="g-target" class="g-target" x="150" y="198" text-anchor="middle">→ --.- °C</text>
+        <!-- scale extremes -->
+        <text class="g-scale" x="66"  y="252" text-anchor="middle">80</text>
+        <text class="g-scale" x="234" y="252" text-anchor="middle">130</text>
+      </svg>
 
-							<div class="row row-cols-1 row-cols-md-3 g-4">
-							  <div class="card">
-							    <img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-							    <div class="card-body">
-							      <h5 class="card-title">Card title</h5>
-							      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-							      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-							    </div>
-							  </div>
-							  <div class="card">
-									<img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-							    <div class="card-body">
-							      <h5 class="card-title">Card title</h5>
-							      <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-							      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-							    </div>
-							  </div>
-							  <div class="card">
-									<img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-							    <div class="card-body">
-										<form>
-											<label for="inputTargetTemp">new target temperature:</label>
-											<input type="int" id="inputTargetTemp" name="inputTargetTemp" required
-														 minlength="4" maxlength="8" size="10">
-										</form>
-										<label for="targetTemp">Target temperature:</label>
-										<p id=targetTemp>This is some text in a paragraph.</p>
-										<label for="currentTemp">Target temperature:</label>
-										<p id=currentTemp>This is some text in a paragraph.</p>
-							    </div>
-							  </div>
-							</div>
-				    </div>
+      <!-- Heater output bar -->
+      <div class="output-row">
+        <span class="output-lbl">Heater</span>
+        <div class="output-track">
+          <div class="output-fill" id="output-fill"></div>
+        </div>
+        <span class="output-val mono" id="output-val">0 %</span>
+      </div>
+    </div>
 
-						<div class="carousel-item" data-bs-interval="false" data-bs-touch="true">
+    <!-- Live chart -->
+    <div class="chart-wrap">
+      <canvas id="live-chart"></canvas>
+    </div>
 
-							<div class="row row-cols-1 row-cols-md-3 g-4">
-								<div class="col">
-									<div class="card h-100">
-										<img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-										<div class="card-body">
-											<h5 class="card-title">Card title</h5>
-											<p class="card-text">This is a short card.</p>
-											<form>
-												<label for="inputTargetTemp">new target temperature:</label>
-												<input type="int" id="inputTargetTemp" name="inputTargetTemp" required
-															 minlength="4" maxlength="8" size="10">
-											</form>
-											<label for="targetTemp">Target temperature:</label>
-											<p id=targetTemp>This is some text in a paragraph.</p>
-											<label for="currentTemp">Target temperature:</label>
-											<p id=currentTemp>This is some text in a paragraph.</p>
-										</div>
-									</div>
-								</div>
-								<div class="col">
-									<div class="card h-100">
-										<img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-										<div class="card-body">
-											<h5 class="card-title">Card title</h5>
-											<p class="card-text">This is a short card.</p>
-										</div>
-									</div>
-								</div>
-								<div class="col">
-									<div class="card h-100">
-										<img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-										<div class="card-body">
-											<h5 class="card-title">Card title</h5>
-											<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-										</div>
-									</div>
-								</div>
-							</div>
+    <!-- Status chips -->
+    <div class="chip-row">
+      <div class="chip" id="chip-sensor">
+        <span class="chip-dot"></span><span>Sensor</span>
+      </div>
+      <div class="chip" id="chip-heater">
+        <span class="chip-dot"></span><span>Heater</span>
+      </div>
+      <div class="chip" id="chip-pump">
+        <span class="chip-dot"></span><span>Pump</span>
+      </div>
+    </div>
+  </section>
 
-						<div class="carousel-item" data-bs-interval="false" data-bs-touch="true">
+  <!-- ─── Right panel: controls ───────────────────────────────────────────── -->
+  <section class="panel-right">
 
-							<div class="row row-cols-1 row-cols-md-3 g-4">
-								<div class="col">
-									<div class="card h-100">
-										<img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-										<div class="card-body">
-											<h5 class="card-title">Card title</h5>
-											<p class="card-text">This is a short card.</p>
-											<form>
-												<label for="inputTargetTemp">new target temperature:</label>
-												<input type="int" id="inputTargetTemp" name="inputTargetTemp" required
-															 minlength="4" maxlength="8" size="10">
-											</form>
-											<label for="targetTemp">Target temperature:</label>
-											<p id=targetTemp>This is some text in a paragraph.</p>
-											<label for="currentTemp">Target temperature:</label>
-											<p id=currentTemp>This is some text in a paragraph.</p>
-										</div>
-									</div>
-								</div>
-								<div class="col">
-									<div class="card h-100">
-										<img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-										<div class="card-body">
-											<h5 class="card-title">Card title</h5>
-											<p class="card-text">This is a short card.</p>
-										</div>
-									</div>
-								</div>
-								<div class="col">
-									<div class="card h-100">
-										<img src="{{ url_for("static", filename="coffee1.jpg") }}" class="card-img-top" alt="...">
-										<div class="card-body">
-											<h5 class="card-title">Card title</h5>
-											<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-										</div>
-									</div>
-								</div>
-							</div>
+    <!-- Tab navigation -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="brew">Brew</button>
+      <button class="tab-btn"        data-tab="pid">PID</button>
+      <button class="tab-btn"        data-tab="adv">Advanced</button>
+    </nav>
 
-				    </div>
-				  </div>
+    <!-- ── Brew tab ───────────────────────────────────────────────────────── -->
+    <div class="tab-pane active" id="tab-brew">
 
-				</div>
+      <!-- Shot timer -->
+      <div class="shot-block">
+        <div class="shot-timer mono" id="shot-timer">0:00</div>
+        <div class="shot-lbl">Shot timer</div>
+      </div>
 
+      <!-- Setpoint slider -->
+      <div class="ctrl-group">
+        <div class="ctrl-header">
+          <span class="ctrl-label">Setpoint</span>
+          <span class="ctrl-val mono" id="setpoint-disp">97.5 °C</span>
+        </div>
+        <input type="range" id="setpoint-slider" class="slider" min="80" max="130" step="0.5" value="97.5">
+        <div class="preset-row">
+          <button class="preset" data-temp="93">93°</button>
+          <button class="preset" data-temp="95">95°</button>
+          <button class="preset" data-temp="97.5">97.5°</button>
+          <button class="preset" data-temp="100">100°</button>
+          <button class="preset" data-temp="110">110°</button>
+        </div>
+      </div>
 
-		</body>
+      <!-- Brew actions -->
+      <div class="action-block">
+        <button class="btn-brew" id="btn-brew">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+          Brew
+        </button>
+        <div class="btn-row2">
+          <button class="btn-secondary" id="btn-purge">Purge</button>
+          <button class="btn-stop"      id="btn-stop">Stop</button>
+        </div>
+      </div>
 
+      <!-- PID mini bars (live contribution view) -->
+      <div class="pid-mini">
+        <div class="pm-row">
+          <span class="pm-lbl">P</span>
+          <div class="pm-track"><div class="pm-fill pm-p" id="pm-p"></div></div>
+          <span class="pm-val mono" id="pm-p-val">0.000</span>
+        </div>
+        <div class="pm-row">
+          <span class="pm-lbl">I</span>
+          <div class="pm-track"><div class="pm-fill pm-i" id="pm-i"></div></div>
+          <span class="pm-val mono" id="pm-i-val">0.000</span>
+        </div>
+        <div class="pm-row">
+          <span class="pm-lbl">D</span>
+          <div class="pm-track"><div class="pm-fill pm-d" id="pm-d"></div></div>
+          <span class="pm-val mono" id="pm-d-val">0.000</span>
+        </div>
+      </div>
+    </div><!-- /tab-brew -->
 
+    <!-- ── PID tab ────────────────────────────────────────────────────────── -->
+    <div class="tab-pane" id="tab-pid">
+
+      <div class="gain-section">
+
+        <div class="gain-row">
+          <div class="gain-meta">
+            <span class="gain-name">Kp</span>
+            <span class="gain-desc">Proportional</span>
+          </div>
+          <input type="range"  id="kp-slider" class="slider" min="0" max="10"  step="0.05"  value="2.0">
+          <input type="number" id="kp-input"  class="gain-num mono" min="0" max="10"  step="0.05"  value="2.0">
+        </div>
+
+        <div class="gain-row">
+          <div class="gain-meta">
+            <span class="gain-name">Ki</span>
+            <span class="gain-desc">Integral</span>
+          </div>
+          <input type="range"  id="ki-slider" class="slider" min="0" max="1"   step="0.001" value="0.05">
+          <input type="number" id="ki-input"  class="gain-num mono" min="0" max="1"   step="0.001" value="0.05">
+        </div>
+
+        <div class="gain-row">
+          <div class="gain-meta">
+            <span class="gain-name">Kd</span>
+            <span class="gain-desc">Derivative</span>
+          </div>
+          <input type="range"  id="kd-slider" class="slider" min="0" max="10"  step="0.05"  value="1.0">
+          <input type="number" id="kd-input"  class="gain-num mono" min="0" max="10"  step="0.05"  value="1.0">
+        </div>
+      </div>
+
+      <!-- Presets -->
+      <div class="pid-presets">
+        <span class="preset-lbl">Presets:</span>
+        <button class="pid-preset-btn" data-preset="aggressive">Aggressive</button>
+        <button class="pid-preset-btn" data-preset="normal">Normal</button>
+        <button class="pid-preset-btn" data-preset="soft">Soft</button>
+      </div>
+
+      <button class="btn-apply" id="btn-apply-pid">Apply PID gains</button>
+
+      <!-- Component bars (centred at 50%) -->
+      <div class="comp-section">
+        <div class="comp-title">Live contributions</div>
+        <div class="comp-row">
+          <span class="comp-lbl">P</span>
+          <div class="comp-track">
+            <div class="comp-centre"></div>
+            <div class="comp-fill comp-fill-p" id="comp-p"></div>
+          </div>
+          <span class="comp-val mono" id="comp-p-val">0.000</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-lbl">I</span>
+          <div class="comp-track">
+            <div class="comp-centre"></div>
+            <div class="comp-fill comp-fill-i" id="comp-i"></div>
+          </div>
+          <span class="comp-val mono" id="comp-i-val">0.000</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-lbl">D</span>
+          <div class="comp-track">
+            <div class="comp-centre"></div>
+            <div class="comp-fill comp-fill-d" id="comp-d"></div>
+          </div>
+          <span class="comp-val mono" id="comp-d-val">0.000</span>
+        </div>
+      </div>
+    </div><!-- /tab-pid -->
+
+    <!-- ── Advanced tab ───────────────────────────────────────────────────── -->
+    <div class="tab-pane" id="tab-adv">
+
+      <!-- Pre-infusion -->
+      <div class="adv-section">
+        <div class="adv-title">Pre-infusion</div>
+        <div class="adv-row">
+          <label for="pre-inf-toggle">Enable</label>
+          <label class="toggle">
+            <input type="checkbox" id="pre-inf-toggle">
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="adv-row">
+          <label for="pre-inf-time">Duration</label>
+          <div class="adv-num-wrap">
+            <input type="number" id="pre-inf-time" class="adv-num mono" min="1" max="30" value="4">
+            <span class="adv-unit">s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brew timing -->
+      <div class="adv-section">
+        <div class="adv-title">Brew timing</div>
+        <div class="adv-row">
+          <label for="brew-dur">Brew duration</label>
+          <div class="adv-num-wrap">
+            <input type="number" id="brew-dur" class="adv-num mono" min="5" max="120" value="25">
+            <span class="adv-unit">s</span>
+          </div>
+        </div>
+        <div class="adv-row">
+          <label for="purge-dur">Purge duration</label>
+          <div class="adv-num-wrap">
+            <input type="number" id="purge-dur" class="adv-num mono" min="1" max="30" value="3">
+            <span class="adv-unit">s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Safety -->
+      <div class="adv-section">
+        <div class="adv-title">Safety</div>
+        <div class="adv-row">
+          <label for="max-temp-inp">Max temperature</label>
+          <div class="adv-num-wrap">
+            <input type="number" id="max-temp-inp" class="adv-num mono" min="100" max="150" value="115">
+            <span class="adv-unit">°C</span>
+          </div>
+        </div>
+        <div class="adv-row">
+          <label for="emergency-toggle">Emergency shutoff</label>
+          <label class="toggle">
+            <input type="checkbox" id="emergency-toggle" checked>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="adv-row">
+          <label for="heater-toggle">Heater enable</label>
+          <label class="toggle">
+            <input type="checkbox" id="heater-toggle" checked>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-apply" id="btn-save-adv">Save settings</button>
+    </div><!-- /tab-adv -->
+
+  </section>
+</main>
+
+<!-- ── Scripts ─────────────────────────────────────────────────────────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="/static/app.js"></script>
+</body>
 </html>

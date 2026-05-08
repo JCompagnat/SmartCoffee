@@ -1,6 +1,4 @@
-flask
-simple-pid
-jsonpickle
-RPi.GPIO
-adafruit-circuitpython-max31865
-adafruit-blinka
+flask>=2.3
+flask-socketio>=5.3
+simple-pid>=2.0
+RPi.GPIO>=0.7
