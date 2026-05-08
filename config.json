@@ -3,7 +3,7 @@
     "kp": 2.0,
     "ki": 0.05,
     "kd": 1.0,
-    "setpoint": 97.5,
+    "setpoint": 100.0,
     "sample_time": 1.0
   },
   "brew": {
